@@ -211,7 +211,7 @@ void AJWLib_Flex_Init(void);
  */
 
 
-void AJWLib_Flex_InitX(char *program_name, int *error_fd,Desk_bool da,int maxsize,Desk_bool virtual);
+void AJWLib_Flex_InitX(char *program_name, int *error_fd,Desk_bool da,int maxsize,Desk_bool virtualm);
 
 /*
  * Flex_Init with dynamic areas, using message tags supplied

@@ -14,7 +14,8 @@ OBJECTS	=	\
 		TaskWindow.o\
 		Window.o\
 		MemCheckFlex.o\
-		Font.o
+		Font.o\
+		ColourPicker.o
 
 MCOBJECTS	=	\
 		mc.Draw\
@@ -31,7 +32,8 @@ MCOBJECTS	=	\
 		mc.TaskWindow\
 		mc.Window\
 		mc.MemCheckFlex\
-		mc.Font
+		mc.Font\
+		mc.ColourPicker
 
 INCLUDE	=	C:
 
@@ -245,46 +247,6 @@ mc.Pane:	C:Desk.h.Coord
 mc.Pane:	C:Desk.h.Core
 mc.Str:	c.Str
 mc.Str:	C:h.ctype
-mc.TaskWindow:	c.TaskWindow
-mc.TaskWindow:	C:Desk.h.Window
-mc.TaskWindow:	C:Desk.h.Wimp
-mc.TaskWindow:	C:Desk.h.Core
-mc.TaskWindow:	C:h.stddef
-mc.TaskWindow:	C:h.kernel
-mc.TaskWindow:	C:Desk.h.WimpSWIs
-mc.TaskWindow:	C:Desk.h.Error2
-mc.TaskWindow:	C:h.stdio
-mc.TaskWindow:	C:h.stdarg
-mc.TaskWindow:	C:Desk.h.Error
-mc.TaskWindow:	C:Desk.h.JumpRaw
-mc.TaskWindow:	C:h.setjmp
-mc.TaskWindow:	C:Desk.h.Debug
-mc.TaskWindow:	C:h.stdio
-mc.TaskWindow:	C:h.stdarg
-mc.TaskWindow:	C:Desk.h.Pointer
-mc.TaskWindow:	C:Desk.h.Icon
-mc.TaskWindow:	C:Desk.h.DragASpr
-mc.TaskWindow:	C:Desk.h.Coord
-mc.TaskWindow:	C:Desk.h.Core
-mc.TaskWindow:	C:Desk.h.Event
-mc.TaskWindow:	C:Desk.h.EventMsg
-mc.TaskWindow:	C:Desk.h.Handler
-mc.TaskWindow:	C:Desk.h.Icon
-mc.TaskWindow:	C:Desk.h.Template
-mc.TaskWindow:	C:Desk.h.Sprite
-mc.TaskWindow:	C:h.stdarg
-mc.TaskWindow:	C:Desk.h.LinkList
-mc.TaskWindow:	C:Desk.h.Pane
-mc.TaskWindow:	C:Desk.h.Error
-mc.TaskWindow:	C:Desk.h.GFX
-mc.TaskWindow:	C:h.stdlib
-mc.TaskWindow:	C:h.string
-mc.TaskWindow:	C:h.stdio
-mc.TaskWindow:	C:AJWLib.h.Pane
-mc.TaskWindow:	C:AJWLib.h.Flex
-mc.TaskWindow:	C:Desk.h.Core
-mc.TaskWindow:	C:h.kernel
-mc.TaskWindow:	C:AJWLib.h.MemCheckFlex
 mc.Window:	c.Window
 mc.Window:	C:Desk.h.WimpSWIs
 mc.Window:	C:Desk.h.Core
@@ -335,29 +297,6 @@ o.FilerActn:	C:Desk.h.Error
 o.FilerActn:	C:Desk.h.JumpRaw
 o.FilerActn:	C:Desk.h.Debug
 o.FilerActn:	C:Desk.h.Filing
-o.Flex:	c.Flex
-o.Flex:	C:h.kernel
-o.Flex:	C:h.swis
-o.Flex:	h.flex
-o.Flex:	C:Desk.h.Core
-o.Flex:	C:h.kernel
-o.Flex:	C:h.kernel
-o.Flex:	C:Desk.h.Msgs
-o.Flex:	C:Desk.h.Error2
-o.Flex:	C:Desk.h.Error
-o.Flex:	C:Desk.h.JumpRaw
-o.Flex:	C:Desk.h.Debug
-o.Flex:	C:AJWLib.h.Msgs
-o.Flex:	C:Desk.h.Window
-o.Flex:	C:Desk.h.Wimp
-o.Flex:	C:Desk.h.WimpSWIs
-o.Flex:	C:Desk.h.Pointer
-o.Flex:	C:Desk.h.Icon
-o.Flex:	C:Desk.h.DragASpr
-o.Flex:	C:Desk.h.Coord
-o.Flex:	C:Desk.h.Core
-o.Flex:	C:Desk.h.Icon
-o.Flex:	C:AJWLib.h.Error2
 o.Icon:	c.Icon
 o.Icon:	C:Desk.h.DeskMem
 o.Icon:	C:Desk.h.Core
@@ -424,35 +363,6 @@ o.Pane:	C:Desk.h.DragASpr
 o.Pane:	C:Desk.h.Coord
 o.Pane:	C:Desk.h.Core
 o.Str:	c.Str
-o.TaskWindow:	c.TaskWindow
-o.TaskWindow:	C:Desk.h.Window
-o.TaskWindow:	C:Desk.h.Wimp
-o.TaskWindow:	C:Desk.h.Core
-o.TaskWindow:	C:h.kernel
-o.TaskWindow:	C:Desk.h.WimpSWIs
-o.TaskWindow:	C:Desk.h.Error2
-o.TaskWindow:	C:Desk.h.Error
-o.TaskWindow:	C:Desk.h.JumpRaw
-o.TaskWindow:	C:Desk.h.Debug
-o.TaskWindow:	C:Desk.h.Pointer
-o.TaskWindow:	C:Desk.h.Icon
-o.TaskWindow:	C:Desk.h.DragASpr
-o.TaskWindow:	C:Desk.h.Coord
-o.TaskWindow:	C:Desk.h.Core
-o.TaskWindow:	C:Desk.h.Event
-o.TaskWindow:	C:Desk.h.EventMsg
-o.TaskWindow:	C:Desk.h.Handler
-o.TaskWindow:	C:Desk.h.Icon
-o.TaskWindow:	C:Desk.h.Template
-o.TaskWindow:	C:Desk.h.Sprite
-o.TaskWindow:	C:Desk.h.LinkList
-o.TaskWindow:	C:Desk.h.Pane
-o.TaskWindow:	C:Desk.h.Error
-o.TaskWindow:	C:Desk.h.GFX
-o.TaskWindow:	C:AJWLib.h.Pane
-o.TaskWindow:	C:AJWLib.h.Flex
-o.TaskWindow:	C:Desk.h.Core
-o.TaskWindow:	C:h.kernel
 o.Window:	c.Window
 o.Window:	C:Desk.h.WimpSWIs
 o.Window:	C:Desk.h.Core
@@ -515,21 +425,9 @@ o.Draw:	C:AJWLib.h.Drawfile
 o.Draw:	C:Desk.h.Wimp
 o.Draw:	C:AJWLib.h.Draw
 o.Draw:	C:AJWLib.h.DrawFile
-mc.Draw:	c.Draw
-mc.Draw:	C:Desk.h.SWI
-mc.Draw:	C:Desk.h.Core
-mc.Draw:	C:h.stddef
-mc.Draw:	C:h.kernel
-mc.Draw:	C:Desk.h.Error2
-mc.Draw:	C:h.stdio
-mc.Draw:	C:h.stdarg
-mc.Draw:	C:Desk.h.Error
-mc.Draw:	C:Desk.h.JumpRaw
-mc.Draw:	C:h.setjmp
-mc.Draw:	C:Desk.h.Debug
-mc.Draw:	C:h.stdio
-mc.Draw:	C:h.stdarg
-mc.Draw:	C:AJWLib.h.Drawfile
-mc.Draw:	C:Desk.h.Wimp
-mc.Draw:	C:AJWLib.h.Draw
-mc.Draw:	C:AJWLib.h.DrawFile
+o.Flex: c.Flex C:h.kernel C:h.swis h.flex C:Desk.h.Core C:h.kernel C:h.kernel C:Desk.h.Msgs C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:AJWLib.h.Msgs C:Desk.h.Window C:Desk.h.Wimp C:Desk.h.WimpSWIs C:Desk.h.Pointer C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Coord C:Desk.h.Core C:Desk.h.Icon C:AJWLib.h.Error2
+o.TaskWindow: c.TaskWindow C:Desk.h.Window C:Desk.h.Wimp C:Desk.h.Core C:h.kernel C:Desk.h.WimpSWIs C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.Pointer C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Coord C:Desk.h.Core C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Handler C:Desk.h.Icon C:Desk.h.Template C:Desk.h.Sprite C:Desk.h.LinkList C:Desk.h.Pane C:Desk.h.Error C:Desk.h.GFX C:AJWLib.h.Pane C:AJWLib.h.Flex C:Desk.h.Core C:h.kernel
+mc.Draw: c.Draw C:Desk.h.SWI C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:AJWLib.h.Drawfile C:Desk.h.Wimp C:AJWLib.h.Draw C:AJWLib.h.DrawFile
+mc.TaskWindow: c.TaskWindow C:Desk.h.Window C:Desk.h.Wimp C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.WimpSWIs C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:Desk.h.Pointer C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Coord C:Desk.h.Core C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Handler C:Desk.h.Icon C:Desk.h.Template C:Desk.h.Sprite C:h.stdarg C:Desk.h.LinkList C:Desk.h.Pane C:Desk.h.Error C:Desk.h.GFX C:h.stdlib C:h.string C:h.stdio C:AJWLib.h.Pane C:AJWLib.h.Flex C:Desk.h.Core C:h.kernel C:AJWLib.h.MemCheckFlex
+o.ColourPicker: c.ColourPicker C:Desk.h.DeskMem C:Desk.h.Core C:h.kernel C:Desk.h.KernelSWIs C:Desk.h.SWI C:Desk.h.Icon C:Desk.h.Wimp C:Desk.h.DragASpr C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug h.ColourPicker
+mc.ColourPicker: c.ColourPicker C:Desk.h.DeskMem C:h.stdlib C:h.stddef C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.KernelSWIs C:Desk.h.SWI C:Desk.h.Icon C:Desk.h.Wimp C:Desk.h.DragASpr C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg h.ColourPicker
