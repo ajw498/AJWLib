@@ -3,6 +3,10 @@
 	©Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.3  1999/10/10 15:08:49  AJW
+	Brings window to top of stack when task starts
+	Calls killedfn after status is set
+
 	Revision 1.2  1999/10/09 18:42:03  AJW
 	Modfied to use Desk
 	Added AJWLib_ prefix
@@ -162,10 +166,6 @@ static Desk_bool AJWLib_TaskWindow_Output(Desk_event_pollblock *block, void *r)
 	int linelength,i;
 	char *newtext=block->data.message.data.bytes+4;
 	int size=block->data.message.data.words[0];
-	if (status!=status_RUNNING) {
-		Desk_Error2_HandleText("A child task is outputting data after it has been killed off!?!");
-		return Desk_TRUE;
-	}
 	linelength=strlen(text[numberoflines-1]);
 	for (i=0;i<size;i++) {
 		if (numberoflines>=max_TEXTLINES) {
@@ -179,7 +179,7 @@ static Desk_bool AJWLib_TaskWindow_Output(Desk_event_pollblock *block, void *r)
 				AJWLib_Flex_Alloc((flex_ptr)&(text[numberoflines++]),72);
 				linelength=0;
 			}
-			text[numberoflines-1][linelength++]=newtext[i];
+			if (newtext[i]>30) text[numberoflines-1][linelength++]=newtext[i];
 		} else {
 			text[numberoflines-1][linelength]='\0';
 			AJWLib_Flex_Alloc((flex_ptr)&(text[numberoflines++]),72);
