@@ -3,31 +3,25 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.1  1999/10/02 23:10:51  AJW
+	Initial revision
+
 
 */
-#include "DeskLib:WimpSWIs.h"
-#include "DeskLib:Msgs.h"
-#include "DeskLib:Str.h"
+#include "Desk.WimpSWIs.h"
+#include "Desk.Msgs.h"
+#include "Desk.Str.h"
 
 #include <string.h>
 
-/*void Window_BringToFront(window_handle win)
-{
-	window_state state;
-	Wimp_GetWindowState(win,&state);
-	state.openblock.behind=-1;
-	Wimp_OpenWindow(&state.openblock);
-} I have just discovered that this function is already in DeskLib!
-*/
-
-window_handle Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
+Desk_window_handle Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
 {
 	struct
 	{
-		window_block win;
-		icon_block icons[8];
+		Desk_window_block win;
+		Desk_icon_block icons[8];
 	} blk;
-	window_handle handle;
+	Desk_window_handle handle;
 	int i;
 	blk.win.screenrect.min.x=0;
 	blk.win.screenrect.min.y=-248;
@@ -83,19 +77,19 @@ window_handle Window_CreateInfoWindow(char *name,char *purpose,char *author,char
 	blk.icons[5].data.indirecttext.bufflen=strlen(author);
 	blk.icons[7].data.indirecttext.buffer=version;
 	blk.icons[7].data.indirecttext.bufflen=strlen(version);
-	Wimp_CreateWindow(&(blk.win),&handle);
+	Desk_Wimp_CreateWindow(&(blk.win),&handle);
 	return handle;
 }
 
-window_handle Window_CreateInfoWindowFromMsgs(char *nametag,char *purposetag,char *author,char *version)
+Desk_window_handle Window_CreateInfoWindowFromMsgs(char *nametag,char *purposetag,char *author,char *version)
 {
 	char name[30];
 	char purpose[30];
 	char *name2,*purpose2;
-	Msgs_Lookup(nametag,name,30);
-	Msgs_Lookup(purposetag,purpose,30);
-	name2=strdup(name);
-	purpose2=strdup(purpose);
+	Desk_Msgs_Lookup(nametag,name,30);
+	Desk_Msgs_Lookup(purposetag,purpose,30);
+	name2=Desk_strdup(name);
+	purpose2=Desk_strdup(purpose);
 	if (name2==NULL || purpose2==NULL) return 0;
 	return Window_CreateInfoWindow(name2,purpose2,author,version);
 }
