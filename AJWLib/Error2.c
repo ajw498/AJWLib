@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "signal.h"
+#include "kernel.h"
 
 #include "Desk.Error2.h"
 #include "Desk.DeskMem.h"

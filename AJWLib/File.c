@@ -2,16 +2,7 @@
 	AJWLib - File
 	© Alex Waugh 1998
 
-	$Log: not supported by cvs2svn $
-	Revision 1.3  2000/01/11 17:00:52  AJW
-	Added fread,fwrite,fclose
-
-	Revision 1.2  2000/01/11 16:24:43  AJW
-	Changed name of function
-
-	Revision 1.1  1999/10/11 20:27:38  AJW
-	Initial revision
-
+	$Id: File.c,v 1.5 2000-02-20 21:33:22 uid1 Exp $
 
 */
 
@@ -29,6 +20,7 @@ FILE *AJWLib_File_fopen(const char *filename,const char *mode)
 	file=fopen(filename,mode);
 	if (file==NULL) {
 		Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
+		Desk_Error2_HandleText("Unable to open file");
 		exit(EXIT_FAILURE);
 	}
 	return file;
