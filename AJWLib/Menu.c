@@ -3,6 +3,10 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.5  2000/02/27 00:54:56  uid1
+	Changed menu data structures to linked lists so items could be freed
+	Added AJWLib_Menu_Register,AJWLib_Menu_Release,AJWLib_Menu_Dispose
+	
 	Revision 1.4  1999/10/09 18:04:58  AJW
 	Added AJWLib_ prefix
 	
@@ -196,10 +200,10 @@ void AJWLib_Menu_FullDispose(Desk_menu_ptr menu)
 	AJWLib_Menu_Release(menu);
 	while (menudata) {
 		if (menudata->menu==menu) {
-			menu_struct *temp=menudata;
+			menu_struct *temp=menudata->next;
 			if (previous) previous->next=menudata->next; else menuhead=menudata->next;
 			Desk_DeskMem_Free(menudata);
-			menudata=temp->next;
+			menudata=temp;
 		} else {
 			previous=menudata;
 			menudata=menudata->next;
