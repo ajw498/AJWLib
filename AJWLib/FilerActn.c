@@ -3,6 +3,9 @@
 	©Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/02 23:40:03  AJW
+	Modified to use Desk
+
 	Revision 1.1  1999/10/02 23:04:42  AJW
 	Initial revision
 
@@ -20,9 +23,6 @@
 #define options_FORCE   4
 #define options_NEWER   8
 #define options_RECURSE 16
-
-#define FilerAction_Copy(source,destdir,options) FilerAction_Start(source,destdir,options,0)
-#define FilerAction_Move(source,destdir,options) FilerAction_Start(source,destdir,options,1)
 
 void FilerAction_Start(char *source,char *destdir,int options,int type)
 {
