@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.3  2000/01/10 15:40:26  AJW
+	Added AJWLib_Font_GetWidthAndHeight
+	
 	Revision 1.2  1999/10/25 17:23:12  AJW
 	Added #includes and #defines so it actually compiled
 
@@ -28,7 +31,7 @@ int AJWLib_Font_GetWidth(const Desk_font_handle handle,const char *str)
 	return width;
 }
 
-Desk_wimp_point *AJWLib_Font_GetWidthAndHeight(const char *font,const int size,const char *str)
+Desk_wimp_point *AJWLib_Font_GetWidthAndHeightGiven(const char *font,const int size,const char *str)
 /*Returns the width and height in OS units of a string in a given font. size is in sixteenths of a point*/
 {
 	int width,height;
@@ -38,5 +41,15 @@ Desk_wimp_point *AJWLib_Font_GetWidthAndHeight(const char *font,const int size,c
 	Desk_Error2_CheckOS(Desk_SWI(5,5,SWI_Font_ScanString,handle,str,1<<8,INFINITY,INFINITY,NULL,NULL,NULL,&width,&height));
 	Desk_Font_ConverttoOS(width,height,&coords.x,&coords.y);
 	Desk_Font_LoseFont(handle);
+	return &coords;
+}
+
+Desk_wimp_point *AJWLib_Font_GetWidthAndHeight(const Desk_font_handle handle,const char *str)
+/*Returns the width and height in OS units of a string in a given font handle*/
+{
+	int width,height;
+	static Desk_wimp_point coords;
+	Desk_Error2_CheckOS(Desk_SWI(5,5,SWI_Font_ScanString,handle,str,1<<8,INFINITY,INFINITY,NULL,NULL,NULL,&width,&height));
+	Desk_Font_ConverttoOS(width,height,&coords.x,&coords.y);
 	return &coords;
 }
