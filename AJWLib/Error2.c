@@ -60,7 +60,7 @@ Desk_error2_block* AJWLib_Error2_ReportFatal(Desk_error2_block* error)
 
 void AJWLib_Error2_HandleMsgs(char *tag,...)
 {
-	char buffer[256];
+	static char buffer[256];
 	va_list ap;
 
 	va_start(ap,tag);

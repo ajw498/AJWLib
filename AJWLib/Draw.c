@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.3  1999/10/09 17:23:05  AJW
+	Added AJWLib_ prefixes
+	
 	Revision 1.2  1999/10/02 23:52:01  AJW
 	Modified to use Desk
 
@@ -15,6 +18,8 @@
 #include "Desk.SWI.h"
 #include "Desk.Error2.h"
 #include "AJWLib.Drawfile.h"
+
+static unsigned char joincap[8]={0,0,0,0,0,0,4,0};
 
 void AJWLib_Draw_CreateRectanglePath(int x,int y,int width,int height,int *block)
 {
@@ -52,14 +57,14 @@ void AJWLib_Draw_PlotLine(int x0,int y0,int x1,int y1,int thickness,os_trfm *mat
 {
 	int block[10];
 	AJWLib_Draw_CreateLinePath(x0,y0,x1,y1,block);
-	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0,matrix,0,thickness,0,0));
+	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0x0,matrix,0,thickness,joincap,0));
 }
 
 void AJWLib_Draw_PlotRectangle(int x,int y,int width,int height,int thickness,os_trfm *matrix)
 {
 	int block[16];
 	AJWLib_Draw_CreateRectanglePath(x,y,width,height,block);
-	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0,matrix,0,thickness,0,0));
+	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0x0,matrix,0,thickness,joincap,0));
 }
 
 void AJWLib_Draw_PlotRectangleFilled(int x,int y,int width,int height,os_trfm *matrix)
