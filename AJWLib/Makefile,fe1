@@ -13,6 +13,7 @@ HEADERS	=	\
 		TaskWindow.h\
 		Window.h\
 		Assert.h\
+		MemCheckFlex.h\
 		Font.h
 
 OBJECTS	=	\
@@ -29,6 +30,7 @@ OBJECTS	=	\
 		Str.o\
 		TaskWindow.o\
 		Window.o\
+		MemCheckFlex.o\
 		Font.o
 
 INCLUDE	=	L:
@@ -38,7 +40,7 @@ TARGET		=	AJWLib.o
 CCFLAGS		=	-I$(INCLUDE) -mstubs -mthrowback -Wall -O3
 LINKFLAGS	=-s
 
-CC		=	gcc -c $(CCFLAGS) 
+CC		=	gcc -c $(CCFLAGS)
 LINK		=	MakeALF $(LINKFLAGS)
 
 .c.o: $(HEADERS)
@@ -50,3 +52,6 @@ $(TARGET):	$(OBJECTS)
 
 Drawfile.o:
 	copy Drawfile.l.drawfile.0x45540.o.000 o.Drawfile A~C~DF~L~N~P~QRS~T~V
+
+MemCheckFlex.o: MemCheckFlex.c MemCheckFlex.h
+	cc -jC: -IL: -throwback -fah -Otime -c MemCheckFlex.c -o MemCheckFlex.o

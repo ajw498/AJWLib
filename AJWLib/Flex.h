@@ -335,5 +335,8 @@ Desk_os_error * AJWLib_Flex_Unlock(int start,int end);
 
 /* end flex.h */
 
+#ifdef MemCheck_MEMCHECK
+#include "AJWLib.MemCheckFlex.h"
+#endif
 
 
