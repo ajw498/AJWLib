@@ -2,7 +2,7 @@
 	AJWLib - File
 	© Alex Waugh 1998
 
-	$Id: File.c,v 1.5 2000-02-20 21:33:22 uid1 Exp $
+	$Id: File.c,v 1.6 2000-02-28 00:20:58 uid1 Exp $
 
 */
 
@@ -36,11 +36,5 @@ void AJWLib_File_fwrite(void *ptr,size_t size,size_t nobj,FILE *stream)
 /*Same as fwrite(), but gives an error2 if needed*/
 {
 	if (nobj!=fwrite(ptr,size,nobj,stream)) Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
-}
-
-void AJWLib_File_fclose(FILE *stream)
-/*Same as fclose(), but gives an error2 if needed*/
-{
-	if (fclose(stream)) Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
 }
 
