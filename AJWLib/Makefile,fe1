@@ -7,6 +7,7 @@ OBJECTS	=	\
 		FilerActn.o\
 		Flex.o\
 		Icon.o\
+		IncDec.o\
 		Menu.o\
 		Msgs.o\
 		Pane.o\
@@ -25,6 +26,7 @@ MCOBJECTS	=	\
 		mc.FilerActn\
 		mc.Flex\
 		mc.Icon\
+		mc.IncDec\
 		mc.Menu\
 		mc.Msgs\
 		mc.Pane\
@@ -364,3 +366,5 @@ mc.Font: c.Font C:Desk.h.Font C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Wimp 
 o.Font: c.Font C:Desk.h.Font C:Desk.h.Core C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.SWI C:AJWLib.h.Font
 o.Menu: c.Menu C:Desk.h.WimpSWIs C:Desk.h.Core C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.Error2 C:Desk.h.DeskMem C:Desk.h.Menu C:Desk.h.Event C:Desk.h.Msgs C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Screen h.Menu
 mc.Menu: c.Menu C:Desk.h.WimpSWIs C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:Desk.h.Error2 C:Desk.h.DeskMem C:h.stdlib C:h.stddef C:Desk.h.Menu C:Desk.h.Event C:Desk.h.Msgs C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Screen h.Menu C:h.stdlib C:h.string
+o.IncDec: c.IncDec C:Desk.h.Core C:h.kernel C:Desk.h.Event C:Desk.h.Wimp C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Window C:Desk.h.WimpSWIs C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.Pointer C:Desk.h.Coord C:Desk.h.Core C:Desk.h.WimpSWIs C:Desk.h.DeskMem C:AJWLib.h.Icon
+mc.IncDec: c.IncDec C:h.stdlib C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Event C:Desk.h.Wimp C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Window C:Desk.h.WimpSWIs C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:Desk.h.Pointer C:Desk.h.Coord C:Desk.h.Core C:Desk.h.WimpSWIs C:Desk.h.DeskMem C:h.stdlib C:h.stddef C:AJWLib.h.Icon
