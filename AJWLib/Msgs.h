@@ -4,3 +4,5 @@ void AJWLib_Msgs_SetText(Desk_window_handle window,Desk_icon_handle icon,char *t
 void AJWLib_Msgs_SetTitle(Desk_window_handle window,char *tag);
 
 char *AJWLib_Msgs_TempLookup(char *tag);
+
+char *AJWLib_Msgs_Lookup(char *tag);
