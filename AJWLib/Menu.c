@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.6  2000/11/11 19:02:26  AJW
+	Fixed small bug in Menu_FullDispose
+	
 	Revision 1.5  2000/02/27 00:54:56  uid1
 	Changed menu data structures to linked lists so items could be freed
 	Added AJWLib_Menu_Register,AJWLib_Menu_Release,AJWLib_Menu_Dispose
@@ -29,9 +32,10 @@
 #include "Desk.Icon.h"
 #include "Desk.Screen.h"
 
+#include "Menu.h"
+
 #include <stdlib.h>
 
-typedef void (*AJWLib_menufn)(int entry,void *reference);
 
 typedef struct menu_struct {
 	Desk_menu_ptr menu;
@@ -69,6 +73,8 @@ static Desk_bool AJWLib_Menu_Handler(Desk_event_pollblock *block,void *reference
 	Desk_menu_item *items=NULL;
 	AJWLib_menufn selectfn=NULL;
 	menu_struct *menudata=menuhead;
+
+	Desk_UNUSED(reference);
 	for (i=0;block->data.selection[i+1]!=-1;i++) {
 		items=(Desk_menu_item *)(currentmenu+1);
 		currentmenu=items[block->data.selection[i]].submenu.menu;
@@ -210,6 +216,18 @@ void AJWLib_Menu_FullDispose(Desk_menu_ptr menu)
 		}
 	}
 	Desk_Menu_FullDispose(menu);
+}
+
+void AJWLib_Menu_FullFullDispose(Desk_menu_ptr menu)
+/*Same as AJWLib_Menu_FullDispose but frees submenus as well*/
+{
+	Desk_menu_item *item;
+
+	item=Desk_Menu_FirstItem(menu);
+	do {
+		if (item->submenu.value) AJWLib_Menu_FullFullDispose(item->submenu.menu);
+	} while (!item->menuflags.data.last && item++);
+	AJWLib_Menu_FullDispose(menu);
 }
 
 void AJWLib_Menu_ToggleTick(Desk_menu_ptr menu,int entry)
