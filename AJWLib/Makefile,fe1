@@ -17,6 +17,7 @@ HEADERS	=	\
 
 OBJECTS	=	\
 		Draw.o\
+		Drawfile.o\
 		Error2.o\
 		File.o\
 		FilerActn.o\
@@ -47,3 +48,5 @@ LINK		=	MakeALF $(LINKFLAGS)
 $(TARGET):	$(OBJECTS)
 	$(LINK) -o $@ $(OBJECTS)
 
+Drawfile.o:
+	copy Drawfile.l.drawfile.0x45540.o.000 o.Drawfile A~C~DF~L~N~P~QRS~T~V
