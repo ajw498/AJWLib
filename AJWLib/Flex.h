@@ -26,7 +26,7 @@
 #define __flex_h
 
 #ifndef __dl_core_h
-#include "DeskLib:Core.h"
+#include "Desk.Core.h"
 #endif
 
 #ifdef __cplusplus
@@ -53,7 +53,7 @@ typedef void **flex_ptr;
  *
  */
 
-int Flex_Alloc(flex_ptr anchor, int n);
+Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n);
 
 
 /* ------------------------------ flex_free -------------------------------
@@ -65,7 +65,7 @@ int Flex_Alloc(flex_ptr anchor, int n);
  *
  */
 
-void Flex_Free(flex_ptr anchor);
+void AJWLib_Flex_Free(flex_ptr anchor);
 
 
 /* ------------------------------- flex_size ------------------------------
@@ -77,7 +77,7 @@ void Flex_Free(flex_ptr anchor);
  *
  */
 
-int Flex_Size(flex_ptr);
+int AJWLib_Flex_Size(flex_ptr);
 
 
 /* --------------------------- flex_extend --------------------------------
@@ -90,7 +90,7 @@ int Flex_Size(flex_ptr);
  *
  */
 
-int Flex_Extend(flex_ptr, int newsize);
+Desk_bool AJWLib_Flex_Extend(flex_ptr, int newsize);
 
 
 /* --------------------------- flex_midextend -----------------------------
@@ -107,7 +107,7 @@ int Flex_Extend(flex_ptr, int newsize);
  *
  */
 
-int Flex_MidExtend(flex_ptr, int at, int by);
+Desk_bool AJWLib_Flex_MidExtend(flex_ptr, int at, int by);
 
 #ifdef flex_CALLBACK
 
@@ -118,13 +118,13 @@ int Flex_MidExtend(flex_ptr, int at, int by);
  * the owner of the block can be notified when the block moves
  */
 
-typedef void (*flex_cbfunc)(BOOL b4, void *handle);
+typedef void (*flex_cbfunc)(Desk_bool b4, void *handle);
 
 /* --------------------------- flex_register -------------------------------
  * Register the function to be called when a block of moves
  */
 
-void Flex_Register(flex_ptr anchor, flex_cbfunc cb, void *handle);
+void AJWLib_Flex_Register(flex_ptr anchor, flex_cbfunc cb, void *handle);
 
 #endif
 
@@ -150,7 +150,7 @@ void Flex_Register(flex_ptr anchor, flex_cbfunc cb, void *handle);
  *
  */
 
-extern int Flex_Budge(int n, void **a);
+extern int AJWLib_Flex_Budge(int n, void **a);
 
 
 /* -------------------------- flex_dont_budge -----------------------------
@@ -170,7 +170,7 @@ extern int Flex_Budge(int n, void **a);
  *
  */
 
-extern int Flex_DontBudge(int n, void **a);
+extern int AJWLib_Flex_DontBudge(int n, void **a);
 
 
 
@@ -190,7 +190,7 @@ extern int Flex_DontBudge(int n, void **a);
  *
  */
 
-void Flex_Init(void);
+void AJWLib_Flex_Init(void);
 
 
 
@@ -211,14 +211,14 @@ void Flex_Init(void);
  */
 
 
-void Flex_InitX(char *program_name, int *error_fd,BOOL da,int maxsize,BOOL virtual);
+void AJWLib_Flex_InitX(char *program_name, int *error_fd,Desk_bool da,int maxsize,Desk_bool virtual);
 
 /*
  * Flex_Init with dynamic areas, using message tags supplied
  *
  */
 
-void Flex_InitDA(char *name,char *maxsize);
+void AJWLib_Flex_InitDA(char *name,char *maxsize);
 
 /* ---------------------------- flex_isdynamic ---------------------------------
  * Description:   Enquire whether dynamic area is in use.
@@ -228,7 +228,7 @@ void Flex_InitDA(char *name,char *maxsize);
  * Other Info:    None
  */
 
-BOOL Flex_IsDynamic(void);
+Desk_bool AJWLib_Flex_IsDynamic(void);
 
 /* ---------------------------- flex_VM ---------------------------------
  * Description:   Enquire whether virtual memory area is in use.
@@ -239,7 +239,7 @@ BOOL Flex_IsDynamic(void);
  */
 
 
-BOOL Flex_IsVM(void);
+Desk_bool AJWLib_Flex_IsVM(void);
 
 
 /* For full details of the following functions. Please read the documentation
@@ -261,7 +261,7 @@ BOOL Flex_IsVM(void);
  * Other Info:    None
  */
 
-os_error * Flex_VMConfigure(int def,int cache,int left);
+Desk_os_error * AJWLib_Flex_VMConfigure(int def,int cache,int left);
 
 
 
@@ -276,7 +276,7 @@ os_error * Flex_VMConfigure(int def,int cache,int left);
  * Other Info:    None
  */
 
-os_error * Flex_ReadVMConfigure(int *def ,int *cache,int *left);
+Desk_os_error * AJWLib_Flex_ReadVMConfigure(int *def ,int *cache,int *left);
 
 
 /* ---------------------------- flex_virtualstart ---------------------------------
@@ -290,7 +290,7 @@ os_error * Flex_ReadVMConfigure(int *def ,int *cache,int *left);
  * Other Info:    None
  */
 
-os_error * Flex_VirtualStart(char * swapfile);
+Desk_os_error * AJWLib_Flex_VirtualStart(char * swapfile);
 
 /* ---------------------------- flex_virtualstop ---------------------------------
  * Description:   stop virtual memory on flex's dynamic area.
@@ -300,7 +300,7 @@ os_error * Flex_VirtualStart(char * swapfile);
  * Other Info:    None
  */
 
-os_error * Flex_VirtualStop(void);
+Desk_os_error * AJWLib_Flex_VirtualStop(void);
 
 
 /* ---------------------------- flex_lock ---------------------------------
@@ -312,7 +312,7 @@ os_error * Flex_VirtualStop(void);
  * Other Info:    None
  */
 
-os_error * Flex_Lock(int start,int end);
+Desk_os_error * AJWLib_Flex_Lock(int start,int end);
 
 
 /* ---------------------------- flex_unlock ---------------------------------
@@ -324,7 +324,7 @@ os_error * Flex_Lock(int start,int end);
  * Other Info:    None
  */
 
-os_error * Flex_Unlock(int start,int end);
+Desk_os_error * AJWLib_Flex_Unlock(int start,int end);
 
 
 

@@ -22,9 +22,6 @@
  *          David Jackson :  19-Apr-96: modified to use Acorn Toolbox (Ugh!)
  */
 
-#define BOOL int
-#define TRUE 1
-#define FALSE 0
 #define TRACE 0
 
 #include <stdlib.h>
@@ -64,7 +61,7 @@
 
 static int flex__initialised = 0;
 static int flex__da          = -1; /* or da number */
-static BOOL flex__VM         = FALSE;  /* is VM in use? */
+static Desk_bool flex__VM         = Desk_FALSE;  /* is VM in use? */
 static int  _mblk;
 
 /* This implementation goes above the original value of GetEnv,
@@ -85,7 +82,7 @@ typedef struct {
 
 static void flex__fail(int i)
 {
-   Desk_Msgs_ReportFatal(0,"flex.flex1:Flex memory error (%d)", i);
+   Desk_Msgs_ReportFatal(0,"Flex.Flex1:Flex memory error (%d)", i);
 #if TRACE
    i = *(int *)-4 ;     /* go bang! */
 #else
@@ -97,7 +94,7 @@ static void flex__fail(int i)
 static void flex__check(void)
 {
    if(flex__initialised == 0)
-     Desk_Msgs_ReportFatal(0,"flex.flex3:Flex not initialised");
+     Desk_Msgs_ReportFatal(0,"Flex.Flex3:Flex not initialised");
 }
 
 
@@ -151,7 +148,7 @@ static void flex__wimpslot(char **top)
    /* set wimpslot size (or read it) */
    r.r[0] = slot;         /*Call Wimp_SlotSize - AJW (1/6/98)*/
    r.r[1] = dud;
-   if (_kernel_swi(0x400EC,&r,&r)!=NULL) Desk_Msgs_ReportFatal(0,"flex.fatal:Fatal Flex memory error");
+   if (_kernel_swi(0x400EC,&r,&r)!=NULL) Desk_Msgs_ReportFatal(0,"Flex.Flex3:Fatal Flex memory error");
    slot = r.r[0];
 
    *top = (char*) slot + 0x8000;
@@ -167,10 +164,10 @@ static void flex__wimpslot(char **top)
 
 }
 
-static BOOL flex__more(int n)
+static Desk_bool flex__more(int n)
 {
    /* Tries to get at least n more bytes, raising flex__lim and
-   returning TRUE if it can. */
+   returning Desk_TRUE if it can. */
    char *prev = flex__lim;
 
    if (flex__da != -1)
@@ -185,12 +182,12 @@ static BOOL flex__more(int n)
       if (err || regs.r[1] < n)
       {  regs.r[1] = -regs.r[1];
          _kernel_swi(OS_ChangeDynamicArea, &regs, &regs);
-         return FALSE;
+         return Desk_FALSE;
       }
 
       err = _kernel_swi(OS_ReadDynamicArea, &regs, &regs);
       flex__lim = flex__base + regs.r[1];
-      return TRUE;
+      return Desk_TRUE;
    }
    else
    {  flex__lim += n;
@@ -202,10 +199,10 @@ static BOOL flex__more(int n)
          flex__lim = prev;             /* restore starting state:
                                           extra memory is useless */
          flex__wimpslot(&flex__lim);
-         return FALSE ;
+         return Desk_FALSE ;
       }
       else
-         return TRUE ;
+         return Desk_TRUE ;
    }
 }
 
@@ -239,16 +236,16 @@ static void flex__give(void)
 }
 
 
-static BOOL flex__ensure(int n)
+static Desk_bool flex__ensure(int n)
 {
    n -= flex__lim - flex__freep;
 
    if (n <= 0 || flex__more(n))
-      return TRUE;
-   else return FALSE;
+      return Desk_TRUE;
+   else return Desk_FALSE;
 }
 
-BOOL Flex_Alloc(flex_ptr anchor, int n)
+Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n)
 {
    flex__rec *p;
 
@@ -257,7 +254,7 @@ BOOL Flex_Alloc(flex_ptr anchor, int n)
    if (n < 0 || ! flex__ensure(sizeof(flex__rec) + roundup(n)))
    {
       *anchor = 0;
-      return FALSE;
+      return Desk_FALSE;
    }
 
    p = (flex__rec*) flex__freep;
@@ -270,7 +267,7 @@ BOOL Flex_Alloc(flex_ptr anchor, int n)
    p->handle = NULL;
 #endif
    *anchor = p + 1; /* sizeof(flex__rec), that is */
-   return TRUE;
+   return Desk_TRUE;
 }
 
 static void flex__reanchor(flex__rec *p, int by)
@@ -303,7 +300,7 @@ static void flex__reanchor(flex__rec *p, int by)
       }                                                              \
    } while (0)
 
-static void flex__notify(BOOL b4, flex__rec *p)
+static void flex__notify(Desk_bool b4, flex__rec *p)
 {  flex__inlinenotify(b4, p);
 }
 
@@ -312,7 +309,7 @@ static void flex__notify(BOOL b4, flex__rec *p)
 #define flex__notify(b4, p) (void) 0
 #endif
 
-void Flex_Free(flex_ptr anchor)
+void AJWLib_Flex_Free(flex_ptr anchor)
 {
    flex__rec *p = ((flex__rec*) *anchor) - 1;
    int roundsize = roundup(p->size);
@@ -325,11 +322,11 @@ void Flex_Free(flex_ptr anchor)
       flex__fail(0);
    }
 
-   flex__notify(TRUE, next);
+   flex__notify(Desk_TRUE, next);
    flex__reanchor(next, - (sizeof(flex__rec) + roundsize));
    memmove(p, next, flex__freep - (char*) next);
    flex__freep -= sizeof(flex__rec) + roundsize;
-   flex__notify(FALSE, p);
+   flex__notify(Desk_FALSE, p);
 
    flex__give();
 
@@ -337,7 +334,7 @@ void Flex_Free(flex_ptr anchor)
 }
 
 
-int Flex_Size(flex_ptr anchor)
+int AJWLib_Flex_Size(flex_ptr anchor)
  {
    flex__rec *p = ((flex__rec*) *anchor) - 1;
    flex__check();
@@ -351,15 +348,15 @@ int Flex_Size(flex_ptr anchor)
 }
 
 
-int Flex_Extend(flex_ptr anchor, int newsize)
+Desk_bool AJWLib_Flex_Extend(flex_ptr anchor, int newsize)
 {
    flex__rec *p = ((flex__rec*) *anchor) - 1;
    flex__check();
-   return(Flex_MidExtend(anchor, p->size, newsize - p->size));
+   return(AJWLib_Flex_MidExtend(anchor, p->size, newsize - p->size));
 }
 
 
-BOOL Flex_MidExtend(flex_ptr anchor, int at, int by)
+Desk_bool AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
 {
    flex__rec *p;
    flex__rec *next;
@@ -389,21 +386,21 @@ BOOL Flex_MidExtend(flex_ptr anchor, int at, int by)
       /* Amount by which the block will actually grow. */
 
       if (! flex__ensure(growth))
-         return FALSE;
+         return Desk_FALSE;
 
       next = (flex__rec*) (((char*) (p + 1)) + roundup(p->size));
       /* The move has to happen in two parts because the moving
       of objects above is word-aligned, while the extension within
       the object may not be. */
 
-      flex__notify(TRUE, next);
+      flex__notify(Desk_TRUE, next);
       flex__reanchor(next, growth);
 
       memmove(((char*) next) + roundup(growth), next, flex__freep - (char*) next
 );
 
       flex__freep += growth;
-      flex__notify(FALSE, (flex__rec *) (((char *) next) + roundup(growth)));
+      flex__notify(Desk_FALSE, (flex__rec *) (((char *) next) + roundup(growth)));
 
       memmove(((char*) (p + 1)) + at + by, ((char*) (p + 1)) + at, p->size - at)
 ;
@@ -427,19 +424,19 @@ BOOL Flex_MidExtend(flex_ptr anchor, int at, int by)
 
       p->size -= by;
 
-      flex__notify(TRUE, next);
+      flex__notify(Desk_TRUE, next);
       flex__reanchor(next, - shrinkage);
 
       memmove(((char*) next) - shrinkage, next, flex__freep - (char*) next);
 
       flex__freep -= shrinkage;
-      flex__notify(FALSE, (flex__rec *) (((char *) next) - shrinkage));
+      flex__notify(Desk_FALSE, (flex__rec *) (((char *) next) - shrinkage));
 
       flex__give();
 
    }
 
-   return TRUE;
+   return Desk_TRUE;
 }
 
 #ifdef flex_CALLBACK
@@ -468,11 +465,11 @@ four. If you fail, return what we can.
 If n is -ve, no result is required: success is assumed.
 */
 
-extern int Flex_Budge(int n, void **a)
+extern int AJWLib_Flex_Budge(int n, void **a)
 {  if (flex__da != -1)
-      return Flex_DontBudge(n, a);
+      return AJWLib_Flex_DontBudge(n, a);
 
-   flex__inlinenotify(TRUE, (flex__rec *) flex__base);
+   flex__inlinenotify(Desk_TRUE, (flex__rec *) flex__base);
 
    if (n >= 0) /* all moving up */
    {
@@ -557,7 +554,7 @@ extern int Flex_Budge(int n, void **a)
       flex__base += roundupn;
       flex__freep += roundupn;
 
-      flex__inlinenotify(FALSE, (flex__rec *) flex__base);
+      flex__inlinenotify(Desk_FALSE, (flex__rec *) flex__base);
       return(roundupn);
 
    }
@@ -578,14 +575,14 @@ extern int Flex_Budge(int n, void **a)
       memmove(flex__base - roundupn, flex__base, flex__freep - flex__base);
       flex__base -= roundupn;
       flex__freep -= roundupn;
-      flex__inlinenotify(FALSE, (flex__rec *) flex__base);
+      flex__inlinenotify(Desk_FALSE, (flex__rec *) flex__base);
    }
 
 
    return(0);
 }
 
-extern int Flex_DontBudge(int n, void **a)
+extern int AJWLib_Flex_DontBudge(int n, void **a)
 {  n = n;
    a = a;
    return 0;
@@ -604,7 +601,7 @@ static void flex__exit(void)
    }
 }
 
-void Flex_InitX(char *program_name, int *error_fd,int da,int maxsize,BOOL virtualise)
+void AJWLib_Flex_InitX(char *program_name, int *error_fd,Desk_bool da,int maxsize,Desk_bool virtualise)
 {  flex__lim = (char *) -1;
    _mblk=(int)error_fd;
 
@@ -642,7 +639,7 @@ void Flex_InitX(char *program_name, int *error_fd,int da,int maxsize,BOOL virtua
             regs.r[2]=(int)(regs.r[0]*.05);
             _kernel_swi(Virtualise_Configure,&regs,&regs);
 
-            flex__VM=TRUE;
+            flex__VM=Desk_TRUE;
            }
          goto initok;
       }
@@ -651,7 +648,7 @@ void Flex_InitX(char *program_name, int *error_fd,int da,int maxsize,BOOL virtua
    flex__wimpslot(&flex__lim);  /* shrink */
    flex__freep = flex__lim;
    flex__base = flex__freep;
-   _kernel_register_slotextend(Flex_DontBudge);
+   _kernel_register_slotextend(AJWLib_Flex_DontBudge);
 
 initok:
    flex__initialised = 1;
@@ -669,12 +666,12 @@ initok:
 
 /* default flex_init() disables use of DA */
 
-void Flex_Init(void)
+void AJWLib_Flex_Init(void)
 {
-	Flex_InitX("Unknown",NULL,FALSE,-1,FALSE);
+	AJWLib_Flex_InitX("Unknown",NULL,Desk_FALSE,-1,Desk_FALSE);
 }
 
-void Flex_InitDA(char *name,char *maxsize)
+void AJWLib_Flex_InitDA(char *name,char *maxsize)
 {
 	char newname[256],newmaxsize[10];
 	int size;
@@ -682,33 +679,32 @@ void Flex_InitDA(char *name,char *maxsize)
 	Desk_Msgs_Lookup(maxsize,newmaxsize,9);
 	size=(int)strtol(newmaxsize,NULL,10);
 	size*=1024*1024;
-	Flex_InitX(newname,NULL,TRUE,size,FALSE);
+	AJWLib_Flex_InitX(newname,NULL,Desk_TRUE,size,Desk_FALSE);
 }
 
-int Flex_IsDynamic(void)
-{  return flex__da != -1;
+Desk_bool AJWLib_Flex_IsDynamic(void)
+{  return (Desk_bool)(flex__da != -1);
 }
 
 
-BOOL Flex_IsVM(void)
+Desk_bool AJWLib_Flex_IsVM(void)
 {
  return flex__VM;
 }
 
-os_error * Flex_VMConfigure(int def,int cache,int left)
-
+Desk_os_error * AJWLib_Flex_VMConfigure(int def,int cache,int left)
 {
 _kernel_swi_regs regs;
 
  regs.r[0]=def;
  regs.r[1]=cache;
  regs.r[2]=left;
- return (os_error *)_kernel_swi(Virtualise_Configure,&regs,&regs);
+ return (Desk_os_error *)_kernel_swi(Virtualise_Configure,&regs,&regs);
 }
 
 
 
-os_error * Flex_ReadVMConfigure(int * def ,int *cache,int *left)
+Desk_os_error * AJWLib_Flex_ReadVMConfigure(int * def ,int *cache,int *left)
 
 {
 _kernel_oserror *err;
@@ -732,11 +728,11 @@ _kernel_swi_regs regs;
 *def=regs.r[5];
  }
 
-return((os_error *)err);
+return((Desk_os_error *)err);
 }
 
 
-os_error * Flex_VirtualStart(char * swapfile)
+Desk_os_error * AJWLib_Flex_VirtualStart(char * swapfile)
 {
 _kernel_swi_regs regs;
 _kernel_oserror *err;
@@ -746,13 +742,13 @@ regs.r[1]=-1;
 regs.r[2]=(int) swapfile;
 err=_kernel_swi(Virtualise_Start,&regs,&regs);
 
-if (!err) flex__VM=TRUE;
-return((os_error *)err);
+if (!err) flex__VM=Desk_TRUE;
+return((Desk_os_error *)err);
 
 }
 
 
-os_error * Flex_VirtualStop(void)
+Desk_os_error * AJWLib_Flex_VirtualStop(void)
 {
 _kernel_swi_regs regs;
 _kernel_oserror *err;
@@ -760,13 +756,13 @@ _kernel_oserror *err;
 regs.r[0]=flex__da;
 err=_kernel_swi(Virtualise_End,&regs,&regs);
 
-if (!err) flex__VM=FALSE;
-return((os_error *)err);
+if (!err) flex__VM=Desk_FALSE;
+return((Desk_os_error *)err);
 
 }
 
 
-os_error * Flex_Lock(int start,int end)
+Desk_os_error * AJWLib_Flex_Lock(int start,int end)
 {
 _kernel_swi_regs regs;
 _kernel_oserror *err=NULL;
@@ -780,11 +776,11 @@ if (flex__VM)
 
 }
 
-return((os_error *)err);
+return((Desk_os_error *)err);
 }
 
 
-os_error * Flex_Unlock(int start,int end)
+Desk_os_error * AJWLib_Flex_Unlock(int start,int end)
 {
 _kernel_swi_regs regs;
 _kernel_oserror *err=NULL;
@@ -798,7 +794,7 @@ if (flex__VM)
 
 }
 
-return((os_error *)err);
+return((Desk_os_error *)err);
 }
 
 
