@@ -65,6 +65,7 @@ void AJWLib_Error2_HandleMsgs(char *tag,...)
 
 	va_start(ap,tag);
 	vsprintf(buffer,AJWLib_Msgs_TempLookup(tag),ap);
+	va_end(ap);
 	Desk_Error2_HandleText(buffer);
 }
 
