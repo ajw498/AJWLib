@@ -35,7 +35,7 @@
 #include "swis.h"
 #include "flex.h"
 
-#include "DeskLib:Msgs.h"
+#include "Desk.Msgs.h"
 
 #ifndef OS_DynamicArea
 #define OS_DynamicArea  0x00066
@@ -85,7 +85,7 @@ typedef struct {
 
 static void flex__fail(int i)
 {
-   Msgs_ReportFatal(0,"flex.flex1:Flex memory error (%d)", i);
+   Desk_Msgs_ReportFatal(0,"flex.flex1:Flex memory error (%d)", i);
 #if TRACE
    i = *(int *)-4 ;     /* go bang! */
 #else
@@ -97,7 +97,7 @@ static void flex__fail(int i)
 static void flex__check(void)
 {
    if(flex__initialised == 0)
-     Msgs_ReportFatal(0,"flex.flex3:Flex not initialised");
+     Desk_Msgs_ReportFatal(0,"flex.flex3:Flex not initialised");
 }
 
 
@@ -151,7 +151,7 @@ static void flex__wimpslot(char **top)
    /* set wimpslot size (or read it) */
    r.r[0] = slot;         /*Call Wimp_SlotSize - AJW (1/6/98)*/
    r.r[1] = dud;
-   if (_kernel_swi(0x400EC,&r,&r)!=NULL) Msgs_ReportFatal(0,"flex.fatal:Fatal Flex memory error");
+   if (_kernel_swi(0x400EC,&r,&r)!=NULL) Desk_Msgs_ReportFatal(0,"flex.fatal:Fatal Flex memory error");
    slot = r.r[0];
 
    *top = (char*) slot + 0x8000;
@@ -678,8 +678,8 @@ void Flex_InitDA(char *name,char *maxsize)
 {
 	char newname[256],newmaxsize[10];
 	int size;
-	Msgs_Lookup(name,newname,255);
-	Msgs_Lookup(maxsize,newmaxsize,9);
+	Desk_Msgs_Lookup(name,newname,255);
+	Desk_Msgs_Lookup(maxsize,newmaxsize,9);
 	size=(int)strtol(newmaxsize,NULL,10);
 	size*=1024*1024;
 	Flex_InitX(newname,NULL,TRUE,size,FALSE);
