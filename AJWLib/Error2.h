@@ -18,7 +18,7 @@
 	Desk_Error2_HandleText(buffer); \
 }
 
-#define AJWLib_Error2_ReportMsgs(tag) Desk_Msgs_Report(1,AJWLib_Msgs_TempLookup(tag),AJWLib_Error2_Describe(&Desk_Error2_globalblock))
+#define AJWLib_Error2_ReportMsgs(tag) Desk_Msgs_Report(1,tag,AJWLib_Error2_Describe(&Desk_Error2_globalblock))
 
 #define AJWLib_Error2_Report(x) Desk_Error_Report(1,x,AJWLib_Error2_Describe(&Desk_Error2_globalblock))
 
