@@ -34,6 +34,8 @@
 
 #include "Desk.Msgs.h"
 #include "Desk.Error2.h"
+#include "AJWLib.Msgs.h"
+#include "AJWLib.Error2.h"
 
 #ifndef OS_DynamicArea
 #define OS_DynamicArea  0x00066
@@ -255,7 +257,7 @@ void AJWLib_Flex_Alloc(flex_ptr anchor, int n)
    if (n < 0 || ! flex__ensure(sizeof(flex__rec) + roundup(n)))
    {
       *anchor = 0;
-      Desk_Error2_HandleText("Error.NoMem:Out of memory");
+      AJWLib_Error2_HandleMsgs("Error.NoMem:Out of memory");
       exit(EXIT_FAILURE);
    }
 
@@ -387,7 +389,7 @@ void AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
       /* Amount by which the block will actually grow. */
 
       if (! flex__ensure(growth)) {
-          Desk_Error2_HandleText("Error.NoMem:Out of memory");
+          AJWLib_Error2_HandleMsgs("Error.NoMem:Out of memory");
           exit(EXIT_FAILURE);
       }
 
