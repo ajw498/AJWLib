@@ -2,7 +2,7 @@
 	AJWLib - Window
 	© Alex Waugh 1998
 
-	$Id: Window.c,v 1.9 2000-03-04 23:35:40 uid1 Exp $
+	$Id: Window.c,v 1.10 2000-06-26 19:36:10 AJW Exp $
 
 */
 
@@ -98,17 +98,12 @@ static Desk_bool AJWLib_Window_SaveClick(Desk_event_pollblock *block, void *ref)
 	return Desk_TRUE;
 }
 
-void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),void (*savefn)(void))
+void AJWLib_Window_RegisterDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),void (*savefn)(void))
 /*Open Discard/Cancel[/Save] window as a transient. Set discardfn to NULL to quit task if discard pressed, and icon to -1 to ignore it*/
 {
-	static Desk_bool registered=Desk_FALSE;
-	if (!registered) {
-		registered=Desk_TRUE;
-		if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,discardfn);
-		if (cancel!=-1) Desk_Event_Claim(Desk_event_CLICK,win,cancel,AJWLib_Window_CancelClick,NULL);
-		if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,savefn);
-	}
-	AJWLib_Window_OpenTransient(win);
+	if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,discardfn);
+	if (cancel!=-1) Desk_Event_Claim(Desk_event_CLICK,win,cancel,AJWLib_Window_CancelClick,NULL);
+	if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,savefn);
 }
 
 Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
