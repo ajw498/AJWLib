@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/03 00:40:42  AJW
+	Modified to use Desk
+
 	Revision 1.1  1999/10/02 23:10:51  AJW
 	Initial revision
 
@@ -14,7 +17,7 @@
 
 #include <string.h>
 
-Desk_window_handle Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
+Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
 {
 	struct
 	{
@@ -81,7 +84,7 @@ Desk_window_handle Window_CreateInfoWindow(char *name,char *purpose,char *author
 	return handle;
 }
 
-Desk_window_handle Window_CreateInfoWindowFromMsgs(char *nametag,char *purposetag,char *author,char *version)
+Desk_window_handle AJWLib_Window_CreateInfoWindowFromMsgs(char *nametag,char *purposetag,char *author,char *version)
 {
 	char name[30];
 	char purpose[30];
@@ -91,5 +94,5 @@ Desk_window_handle Window_CreateInfoWindowFromMsgs(char *nametag,char *purposeta
 	name2=Desk_strdup(name);
 	purpose2=Desk_strdup(purpose);
 	if (name2==NULL || purpose2==NULL) return 0;
-	return Window_CreateInfoWindow(name2,purpose2,author,version);
+	return AJWLib_Window_CreateInfoWindow(name2,purpose2,author,version);
 }

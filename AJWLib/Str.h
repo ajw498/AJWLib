@@ -1,4 +1,4 @@
 
-extern void Str_LowerCase(char *str);
+extern void AJWLib_Str_LowerCase(char *str);
 
-extern void Str_LowerCaseCopy(char *dest,char *source);
+extern void AJWLib_Str_LowerCaseCopy(char *dest,char *source);
