@@ -3,6 +3,10 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.6  2000/02/13 21:39:16  uid1
+	Added Window_OpenTransient
+	Added -Wall to makefile
+	
 	Revision 1.5  2000/02/13 15:48:23  uid1
 	Re-enabled files
 	
@@ -30,6 +34,45 @@ void AJWLib_Window_OpenTransient(Desk_window_handle win)
 	Desk_window_state blk;
 	Desk_Wimp_GetWindowState(win,&blk);
 	Desk_Wimp_CreateMenu((Desk_menu_ptr)win,(Desk_screen_size.x-blk.openblock.screenrect.max.x+blk.openblock.screenrect.min.x)/2,(Desk_screen_size.y+blk.openblock.screenrect.max.y-blk.openblock.screenrect.min.y)/2);
+}
+
+static Desk_bool AJWLib_Window_DiscardClick(Desk_event_pollblock *block, void *ref)
+{
+	void (*discardfn)(void)=ref;
+	if (!block->data.mouse.button.data.select) return Desk_FALSE;
+	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
+	if (discardfn) discardfn(); else Desk_Event_CloseDown();
+	return Desk_TRUE;
+}
+
+static Desk_bool AJWLib_Window_CancelClick(Desk_event_pollblock *block, void *ref)
+{
+	Desk_UNUSED(ref);
+	if (!block->data.mouse.button.data.select) return Desk_FALSE;
+	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
+	return Desk_TRUE;
+}
+
+static Desk_bool AJWLib_Window_SaveClick(Desk_event_pollblock *block, void *ref)
+{
+	Desk_window_handle savewin=(Desk_window_handle)ref;
+	if (!block->data.mouse.button.data.select) return Desk_FALSE;
+	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
+	if (savewin) AJWLib_Window_OpenTransient(savewin);
+	return Desk_TRUE;
+}
+
+void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),Desk_window_handle savewin)
+/*Open Discard/Cancel[/Save] window as a transient. Set discardfn to NULL to quit task if discard pressed, and icon to -1 to ignore it*/
+{
+	static Desk_bool registered=Desk_FALSE;
+	if (!registered) {
+		registered=Desk_TRUE;
+		if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,discardfn);
+		if (cancel!=-1) Desk_Event_Claim(Desk_event_CLICK,win,cancel,AJWLib_Window_CancelClick,NULL);
+		if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,(void *)savewin);
+	}
+	AJWLib_Window_OpenTransient(win);
 }
 
 Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
