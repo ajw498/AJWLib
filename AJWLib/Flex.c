@@ -33,6 +33,7 @@
 #include "flex.h"
 
 #include "Desk.Msgs.h"
+#include "Desk.Error2.h"
 
 #ifndef OS_DynamicArea
 #define OS_DynamicArea  0x00066
@@ -245,7 +246,7 @@ static Desk_bool flex__ensure(int n)
    else return Desk_FALSE;
 }
 
-Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n)
+void AJWLib_Flex_Alloc(flex_ptr anchor, int n)
 {
    flex__rec *p;
 
@@ -254,7 +255,8 @@ Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n)
    if (n < 0 || ! flex__ensure(sizeof(flex__rec) + roundup(n)))
    {
       *anchor = 0;
-      return Desk_FALSE;
+      Desk_Error2_HandleText("Error.NoMem:Out of memory");
+      exit(EXIT_FAILURE);
    }
 
    p = (flex__rec*) flex__freep;
@@ -267,7 +269,6 @@ Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n)
    p->handle = NULL;
 #endif
    *anchor = p + 1; /* sizeof(flex__rec), that is */
-   return Desk_TRUE;
 }
 
 static void flex__reanchor(flex__rec *p, int by)
@@ -348,15 +349,15 @@ int AJWLib_Flex_Size(flex_ptr anchor)
 }
 
 
-Desk_bool AJWLib_Flex_Extend(flex_ptr anchor, int newsize)
+void AJWLib_Flex_Extend(flex_ptr anchor, int newsize)
 {
    flex__rec *p = ((flex__rec*) *anchor) - 1;
    flex__check();
-   return(AJWLib_Flex_MidExtend(anchor, p->size, newsize - p->size));
+   AJWLib_Flex_MidExtend(anchor, p->size, newsize - p->size);
 }
 
 
-Desk_bool AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
+void AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
 {
    flex__rec *p;
    flex__rec *next;
@@ -385,8 +386,10 @@ Desk_bool AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
       int growth = roundup(p->size + by) - roundup(p->size);
       /* Amount by which the block will actually grow. */
 
-      if (! flex__ensure(growth))
-         return Desk_FALSE;
+      if (! flex__ensure(growth)) {
+          Desk_Error2_HandleText("Error.NoMem:Out of memory");
+          exit(EXIT_FAILURE);
+      }
 
       next = (flex__rec*) (((char*) (p + 1)) + roundup(p->size));
       /* The move has to happen in two parts because the moving
@@ -436,7 +439,6 @@ Desk_bool AJWLib_Flex_MidExtend(flex_ptr anchor, int at, int by)
 
    }
 
-   return Desk_TRUE;
 }
 
 #ifdef flex_CALLBACK

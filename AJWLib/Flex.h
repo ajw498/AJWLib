@@ -53,7 +53,7 @@ typedef void **flex_ptr;
  *
  */
 
-Desk_bool AJWLib_Flex_Alloc(flex_ptr anchor, int n);
+void AJWLib_Flex_Alloc(flex_ptr anchor, int n);
 
 
 /* ------------------------------ flex_free -------------------------------
@@ -90,7 +90,7 @@ int AJWLib_Flex_Size(flex_ptr);
  *
  */
 
-Desk_bool AJWLib_Flex_Extend(flex_ptr, int newsize);
+void AJWLib_Flex_Extend(flex_ptr, int newsize);
 
 
 /* --------------------------- flex_midextend -----------------------------
@@ -107,7 +107,7 @@ Desk_bool AJWLib_Flex_Extend(flex_ptr, int newsize);
  *
  */
 
-Desk_bool AJWLib_Flex_MidExtend(flex_ptr, int at, int by);
+void AJWLib_Flex_MidExtend(flex_ptr, int at, int by);
 
 #ifdef flex_CALLBACK
 
