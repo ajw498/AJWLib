@@ -1,2 +1,2 @@
 
-FILE *AJWLib_fopen(const char *filename,const char *mode);
+FILE *AJWLib_File_fopen(const char *filename,const char *mode);
