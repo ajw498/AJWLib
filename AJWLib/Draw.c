@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.5  2000/11/06 16:26:33  AJW
+	Changes to the error handler to make it more reentrant
+	
 	Revision 1.4  2000/10/02 11:38:10  AJW
 	Added specification of join cap in plotting, so different line thicknesses work
 	
@@ -20,7 +23,9 @@
 
 #include "Desk.SWI.h"
 #include "Desk.Error2.h"
+
 #include "AJWLib.Drawfile.h"
+#include "AJWLib.Draw.h"
 
 static unsigned char joincap[8]={0,0,0,0,0,0,4,0};
 /*static unsigned char *joincap=NULL;*/
@@ -75,6 +80,6 @@ void AJWLib_Draw_PlotRectangleFilled(int x,int y,int width,int height,os_trfm *m
 {
 	int block[16];
 	AJWLib_Draw_CreateRectanglePath(x,y,width,height,block);
-	Desk_Error2_CheckOS(Desk_SWI(4,0,Desk_SWI_Draw_Fill,block,0,matrix,0));
+	Desk_Error2_CheckOS(Desk_SWI(4,0,Desk_SWI_Draw_Fill,block,0x30,matrix,0));
 }
 
