@@ -1,5 +1,7 @@
 #include "Desk.Sprite.h"
 
+extern void AJWLib_Window_KeyHandler(Desk_window_handle window,Desk_icon_handle ok,Desk_event_handler okfn,Desk_icon_handle cancel,Desk_event_handler cancelfn,void *ref);
+
 extern void AJWLib_Window_OpenTransient(Desk_window_handle win);
 
 extern void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),void (*savefn)(void));

@@ -2,18 +2,70 @@
 	AJWLib - Window
 	© Alex Waugh 1998
 
-	$Id: Window.c,v 1.8 2000-02-28 20:20:14 uid1 Exp $
+	$Id: Window.c,v 1.9 2000-03-04 23:35:40 uid1 Exp $
 
 */
+
 #include "Desk.WimpSWIs.h"
 #include "Desk.Msgs.h"
 #include "Desk.Menu.h"
+#include "Desk.Icon.h"
+#include "Desk.Window.h"
+#include "Desk.DeskMem.h"
 #include "Desk.Str.h"
 #include "Desk.Screen.h"
+#include "Desk.KeyCodes.h"
 
 #include <string.h>
 
+typedef struct keydata {
+	Desk_icon_handle ok,cancel;
+	Desk_event_handler okfn,cancelfn;
+	void *ref;
+} keydata;
+
+static Desk_bool AJWLib_Window_KeyHandlerFn(Desk_event_pollblock *block,void *ref)
+{
+	keydata *data=ref;
+	Desk_event_handler fn=NULL;
+	Desk_icon_handle icon=-1;
+	Desk_window_handle window=block->data.key.caret.window;
+	ref=data->ref;
+	switch (block->data.key.code) {
+		case Desk_keycode_RETURN:
+			icon=data->ok;
+			fn=data->okfn;
+			break;
+		case Desk_keycode_ESCAPE:
+			icon=data->cancel;
+			fn=data->cancelfn;
+			break;
+		default:
+			return Desk_FALSE;
+	}
+	if (icon>=0) Desk_Icon_Select(window,icon);
+	Desk_Window_Hide(window);
+	if (icon>=0) Desk_Icon_Deselect(window,icon);
+	block->data.mouse.button.value=4;
+	block->data.mouse.window=window;
+	block->data.mouse.icon=icon;
+	if (fn!=NULL) fn(block,ref);
+	return Desk_TRUE;
+}
+
+void AJWLib_Window_KeyHandler(Desk_window_handle window,Desk_icon_handle ok,Desk_event_handler okfn,Desk_icon_handle cancel,Desk_event_handler cancelfn,void *ref)
+{
+	keydata *data=Desk_DeskMem_Malloc(sizeof(keydata));
+	data->ok=ok;
+	data->cancel=cancel;
+	data->okfn=okfn;
+	data->cancelfn=cancelfn;
+	data->ref=ref;
+	Desk_Event_Claim(Desk_event_KEY,window,Desk_event_ANY,AJWLib_Window_KeyHandlerFn,data);
+}
+
 void AJWLib_Window_OpenTransient(Desk_window_handle win)
+/*Open a transient window (i.e. as a menu) centred on screen*/
 {
 	Desk_window_state blk;
 	Desk_Wimp_GetWindowState(win,&blk);
