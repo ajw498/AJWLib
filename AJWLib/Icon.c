@@ -3,6 +3,9 @@
 	©Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/03 00:03:41  AJW
+	Modified to use Desk
+
 	Revision 1.1  1999/10/02 23:06:48  AJW
 	Initial revision
 
@@ -21,19 +24,19 @@
 #define SWI_Wimp_SpriteOp 0x400E9
 #define SWI_Wimp_CreateIcon 0x400C2
 
-static Desk_bool Icon_CheckAdjust(Desk_event_pollblock *block,void *r)
+static Desk_bool AJWLib_Icon_CheckAdjust(Desk_event_pollblock *block,void *r)
 {
 	if (!block->data.mouse.button.data.adjust) return Desk_FALSE;
 	if (!Desk_Icon_GetSelect(block->data.mouse.window,block->data.mouse.icon)) Desk_Icon_Select(block->data.mouse.window,block->data.mouse.icon);
 	return Desk_FALSE;
 }
 
-void Icon_RegisterCheckAdjust(Desk_window_handle win,Desk_icon_handle icon)
+void AJWLib_Icon_RegisterCheckAdjust(Desk_window_handle win,Desk_icon_handle icon)
 {
-	Desk_Error2_CheckBOOL(Desk_Event_Claim(Desk_event_CLICK,win,icon,Icon_CheckAdjust,NULL));
+	Desk_Event_Claim(Desk_event_CLICK,win,icon,AJWLib_Icon_CheckAdjust,NULL);
 }
 
-Desk_icon_handle Icon_FullBarIcon(char *text,char *sprite,int position,int priority)
+Desk_icon_handle AJWLib_Icon_FullBarIcon(char *text,char *sprite,int position,int priority)
 {
 	Desk_icon_handle handle;
 	Desk_icon_createblock iconblk;
