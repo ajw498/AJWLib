@@ -3,6 +3,8 @@
 #include "signal.h"
 #include "kernel.h"
 
+#include "MemCheck:MemCheck.h"
+
 #include "Desk.Error.h"
 #include "Desk.Error2.h"
 #include "Desk.DeskMem.h"

@@ -2,7 +2,7 @@
 	AJWLib - Window
 	© Alex Waugh 1998
 
-	$Id: Window.c,v 1.11 2000-11-06 16:26:36 AJW Exp $
+	$Id: Window.c,v 1.12 2000-11-08 17:53:12 AJW Exp $
 
 */
 
@@ -159,10 +159,10 @@ Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char 
 		blk.icons[1+2*i].flags.value=0x1700013D;
 		blk.icons[1+2*i].data.indirecttext.validstring="R2";
 	}
-	strcpy(blk.icons[0].data.text,"Name:");
-	strcpy(blk.icons[2].data.text,"Purpose:");
-	strcpy(blk.icons[4].data.text,"Author:");
-	strcpy(blk.icons[6].data.text,"Version:");
+	strcpy(blk.icons[0].data.text,"Name");
+	strcpy(blk.icons[2].data.text,"Purpose");
+	strcpy(blk.icons[4].data.text,"Author");
+	strcpy(blk.icons[6].data.text,"Version");
 	blk.icons[1].data.indirecttext.buffer=name;
 	blk.icons[1].data.indirecttext.bufflen=strlen(name);
 	blk.icons[3].data.indirecttext.buffer=purpose;
