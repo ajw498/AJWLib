@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.4  2000/10/02 11:38:10  AJW
+	Added specification of join cap in plotting, so different line thicknesses work
+	
 	Revision 1.3  1999/10/09 17:23:05  AJW
 	Added AJWLib_ prefixes
 	
@@ -20,6 +23,7 @@
 #include "AJWLib.Drawfile.h"
 
 static unsigned char joincap[8]={0,0,0,0,0,0,4,0};
+/*static unsigned char *joincap=NULL;*/
 
 void AJWLib_Draw_CreateRectanglePath(int x,int y,int width,int height,int *block)
 {

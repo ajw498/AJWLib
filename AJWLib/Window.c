@@ -2,7 +2,7 @@
 	AJWLib - Window
 	© Alex Waugh 1998
 
-	$Id: Window.c,v 1.10 2000-06-26 19:36:10 AJW Exp $
+	$Id: Window.c,v 1.11 2000-11-06 16:26:36 AJW Exp $
 
 */
 
@@ -23,6 +23,8 @@ typedef struct keydata {
 	Desk_event_handler okfn,cancelfn;
 	void *ref;
 } keydata;
+
+typedef void (*voidfn)(void);
 
 static Desk_bool AJWLib_Window_KeyHandlerFn(Desk_event_pollblock *block,void *ref)
 {
@@ -74,7 +76,7 @@ void AJWLib_Window_OpenTransient(Desk_window_handle win)
 
 static Desk_bool AJWLib_Window_DiscardClick(Desk_event_pollblock *block, void *ref)
 {
-	void (*discardfn)(void)=ref;
+	voidfn discardfn=(voidfn)ref;
 	if (!block->data.mouse.button.data.select) return Desk_FALSE;
 	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
 	if (discardfn) discardfn(); else Desk_Event_CloseDown();
@@ -91,7 +93,7 @@ static Desk_bool AJWLib_Window_CancelClick(Desk_event_pollblock *block, void *re
 
 static Desk_bool AJWLib_Window_SaveClick(Desk_event_pollblock *block, void *ref)
 {
-	void (*savefn)(void)=ref;
+	voidfn savefn=(voidfn)ref;
 	if (!block->data.mouse.button.data.select) return Desk_FALSE;
 	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
 	if (savefn) savefn();
@@ -101,9 +103,9 @@ static Desk_bool AJWLib_Window_SaveClick(Desk_event_pollblock *block, void *ref)
 void AJWLib_Window_RegisterDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),void (*savefn)(void))
 /*Open Discard/Cancel[/Save] window as a transient. Set discardfn to NULL to quit task if discard pressed, and icon to -1 to ignore it*/
 {
-	if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,discardfn);
+	if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,(void *)discardfn);
 	if (cancel!=-1) Desk_Event_Claim(Desk_event_CLICK,win,cancel,AJWLib_Window_CancelClick,NULL);
-	if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,savefn);
+	if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,(void *)savefn);
 }
 
 Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)

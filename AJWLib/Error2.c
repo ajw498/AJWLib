@@ -34,7 +34,7 @@ char* AJWLib_Error2_Describe(Desk_error2_block* error)
 		} else sprintf(buffer,"OS error. NULL");
 	} else if ( error->type==Desk_error2_type_DESKMEM) {
 		if ( error->data.deskmem)
-			sprintf(buffer,"DeskMem error Size=%i, ptr=0x%p",error->data.deskmem->size,error->data.deskmem->ptr);
+			sprintf(buffer,"Not enough memory");
 		else sprintf(buffer,"DeskMem error");
 	} else if ( error->type==Desk_error2_type_SIGNAL) {
 		if (error->data.signal==SIGOSERROR) {
@@ -60,12 +60,18 @@ Desk_error2_block* AJWLib_Error2_ReportFatal(Desk_error2_block* error)
 
 void AJWLib_Error2_HandleMsgs(char *tag,...)
 {
-	static char buffer[256];
+	char buffer[256],*msg;
 	va_list ap;
 
 	va_start(ap,tag);
 	vsprintf(buffer,AJWLib_Msgs_TempLookup(tag),ap);
 	va_end(ap);
-	Desk_Error2_HandleText(buffer);
+	msg=malloc(strlen(buffer)+1); /*Memory leak, but better than reentrancy problems with a static buffer*/
+	if (msg==NULL) {
+		msg="Out of memory in error handler";
+	} else {
+		strcpy(msg,buffer);
+	}
+	Desk_Error2_HandleText(msg);
 }
 

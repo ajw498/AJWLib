@@ -33,15 +33,17 @@ OBJECTS	=	\
 		MemCheckFlex.o\
 		Font.o
 
-INCLUDE	=	L:
+INCLUDE	=	C:
 
 TARGET		=	AJWLib.o
 
-CCFLAGS		=	-I$(INCLUDE) -mstubs -mthrowback -Wall -O3
+CCFLAGS		=	-I$(INCLUDE) -depend !Depend -throwback -strict -fah -Otime
 LINKFLAGS	=-s
 
-CC		=	gcc -c $(CCFLAGS)
+CC		=	cc -c $(CCFLAGS)
 LINK		=	MakeALF $(LINKFLAGS)
+
+all: $(TARGET)
 
 .c.o: $(HEADERS)
 	$(CC) $< -o $@
@@ -58,3 +60,183 @@ MemCheckFlex.o: MemCheckFlex.c MemCheckFlex.h
 
 Error2.o: Error2.c Error2.h
 	cc -jC: -IL: -throwback -fah -Otime -c Error2.c -o Error2.o
+
+# Dynamic dependencies:
+o.Font:	c.Font
+o.Font:	C:Desk.h.Font
+o.Font:	C:Desk.h.Core
+o.Font:	C:h.kernel
+o.Font:	C:Desk.h.Wimp
+o.Font:	C:Desk.h.Error2
+o.Font:	C:Desk.h.Error
+o.Font:	C:Desk.h.JumpRaw
+o.Font:	C:Desk.h.Debug
+o.Font:	C:Desk.h.SWI
+o.Draw:	c.Draw
+o.Draw:	C:Desk.h.SWI
+o.Draw:	C:Desk.h.Core
+o.Draw:	C:h.kernel
+o.Draw:	C:Desk.h.Error2
+o.Draw:	C:Desk.h.Error
+o.Draw:	C:Desk.h.JumpRaw
+o.Draw:	C:Desk.h.Debug
+o.Draw:	C:AJWLib.h.Drawfile
+o.Draw:	C:Desk.h.Wimp
+o.File:	c.File
+o.File:	C:Desk.h.Error2
+o.File:	C:Desk.h.Error
+o.File:	C:Desk.h.Core
+o.File:	C:h.kernel
+o.File:	C:Desk.h.JumpRaw
+o.File:	C:Desk.h.Debug
+o.File:	C:h.kernel
+o.FilerActn:	c.FilerActn
+o.FilerActn:	C:Desk.h.Wimp
+o.FilerActn:	C:Desk.h.Core
+o.FilerActn:	C:h.kernel
+o.FilerActn:	C:Desk.h.WimpSWIs
+o.FilerActn:	C:Desk.h.Error2
+o.FilerActn:	C:Desk.h.Error
+o.FilerActn:	C:Desk.h.JumpRaw
+o.FilerActn:	C:Desk.h.Debug
+o.FilerActn:	C:Desk.h.Filing
+o.Icon:	c.Icon
+o.Icon:	C:Desk.h.DeskMem
+o.Icon:	C:Desk.h.Core
+o.Icon:	C:h.kernel
+o.Icon:	C:Desk.h.KernelSWIs
+o.Icon:	C:Desk.h.SWI
+o.Icon:	C:Desk.h.Icon
+o.Icon:	C:Desk.h.Wimp
+o.Icon:	C:Desk.h.DragASpr
+o.Icon:	C:Desk.h.Event
+o.Icon:	C:Desk.h.Error2
+o.Icon:	C:Desk.h.Error
+o.Icon:	C:Desk.h.JumpRaw
+o.Icon:	C:Desk.h.Debug
+o.Menu:	c.Menu
+o.Menu:	C:Desk.h.WimpSWIs
+o.Menu:	C:Desk.h.Core
+o.Menu:	C:h.kernel
+o.Menu:	C:Desk.h.Wimp
+o.Menu:	C:Desk.h.Error2
+o.Menu:	C:Desk.h.Error
+o.Menu:	C:Desk.h.JumpRaw
+o.Menu:	C:Desk.h.Debug
+o.Menu:	C:Desk.h.Error2
+o.Menu:	C:Desk.h.DeskMem
+o.Menu:	C:Desk.h.Menu
+o.Menu:	C:Desk.h.Event
+o.Menu:	C:Desk.h.Msgs
+o.Menu:	C:Desk.h.Icon
+o.Menu:	C:Desk.h.DragASpr
+o.Menu:	C:Desk.h.Screen
+o.Msgs:	c.Msgs
+o.Msgs:	C:Desk.h.Icon
+o.Msgs:	C:Desk.h.Wimp
+o.Msgs:	C:Desk.h.Core
+o.Msgs:	C:h.kernel
+o.Msgs:	C:Desk.h.DragASpr
+o.Msgs:	C:Desk.h.Msgs
+o.Msgs:	C:Desk.h.Window
+o.Msgs:	C:Desk.h.WimpSWIs
+o.Msgs:	C:Desk.h.Error2
+o.Msgs:	C:Desk.h.Error
+o.Msgs:	C:Desk.h.JumpRaw
+o.Msgs:	C:Desk.h.Debug
+o.Msgs:	C:Desk.h.Pointer
+o.Msgs:	C:Desk.h.Coord
+o.Msgs:	C:Desk.h.Core
+o.Msgs:	C:Desk.h.DeskMem
+o.Msgs:	C:Desk.h.Error2
+o.Pane:	c.Pane
+o.Pane:	C:Desk.h.WimpSWIs
+o.Pane:	C:Desk.h.Core
+o.Pane:	C:h.kernel
+o.Pane:	C:Desk.h.Wimp
+o.Pane:	C:Desk.h.Error2
+o.Pane:	C:Desk.h.Error
+o.Pane:	C:Desk.h.JumpRaw
+o.Pane:	C:Desk.h.Debug
+o.Pane:	C:Desk.h.Pane
+o.Pane:	C:Desk.h.Window
+o.Pane:	C:Desk.h.Pointer
+o.Pane:	C:Desk.h.Icon
+o.Pane:	C:Desk.h.DragASpr
+o.Pane:	C:Desk.h.Coord
+o.Pane:	C:Desk.h.Core
+o.Str:	c.Str
+o.TaskWindow:	c.TaskWindow
+o.TaskWindow:	C:Desk.h.Window
+o.TaskWindow:	C:Desk.h.Wimp
+o.TaskWindow:	C:Desk.h.Core
+o.TaskWindow:	C:h.kernel
+o.TaskWindow:	C:Desk.h.WimpSWIs
+o.TaskWindow:	C:Desk.h.Error2
+o.TaskWindow:	C:Desk.h.Error
+o.TaskWindow:	C:Desk.h.JumpRaw
+o.TaskWindow:	C:Desk.h.Debug
+o.TaskWindow:	C:Desk.h.Pointer
+o.TaskWindow:	C:Desk.h.Icon
+o.TaskWindow:	C:Desk.h.DragASpr
+o.TaskWindow:	C:Desk.h.Coord
+o.TaskWindow:	C:Desk.h.Core
+o.TaskWindow:	C:Desk.h.Event
+o.TaskWindow:	C:Desk.h.EventMsg
+o.TaskWindow:	C:Desk.h.Handler
+o.TaskWindow:	C:Desk.h.Icon
+o.TaskWindow:	C:Desk.h.Template
+o.TaskWindow:	C:Desk.h.Sprite
+o.TaskWindow:	C:Desk.h.LinkList
+o.TaskWindow:	C:Desk.h.Pane
+o.TaskWindow:	C:Desk.h.Error
+o.TaskWindow:	C:Desk.h.GFX
+o.TaskWindow:	C:AJWLib.h.Pane
+o.TaskWindow:	C:AJWLib.h.Flex
+o.TaskWindow:	C:Desk.h.Core
+o.TaskWindow:	C:h.kernel
+o.Window:	c.Window
+o.Window:	C:Desk.h.WimpSWIs
+o.Window:	C:Desk.h.Core
+o.Window:	C:h.kernel
+o.Window:	C:Desk.h.Wimp
+o.Window:	C:Desk.h.Error2
+o.Window:	C:Desk.h.Error
+o.Window:	C:Desk.h.JumpRaw
+o.Window:	C:Desk.h.Debug
+o.Window:	C:Desk.h.Msgs
+o.Window:	C:Desk.h.Menu
+o.Window:	C:Desk.h.Event
+o.Window:	C:Desk.h.Icon
+o.Window:	C:Desk.h.DragASpr
+o.Window:	C:Desk.h.Window
+o.Window:	C:Desk.h.Pointer
+o.Window:	C:Desk.h.Coord
+o.Window:	C:Desk.h.Core
+o.Window:	C:Desk.h.DeskMem
+o.Window:	C:Desk.h.Str
+o.Window:	C:Desk.h.Screen
+o.Window:	C:Desk.h.KeyCodes
+o.Flex:	c.Flex
+o.Flex:	C:h.kernel
+o.Flex:	C:h.swis
+o.Flex:	h.flex
+o.Flex:	C:Desk.h.Core
+o.Flex:	C:h.kernel
+o.Flex:	C:h.kernel
+o.Flex:	C:Desk.h.Msgs
+o.Flex:	C:Desk.h.Error2
+o.Flex:	C:Desk.h.Error
+o.Flex:	C:Desk.h.JumpRaw
+o.Flex:	C:Desk.h.Debug
+o.Flex:	C:AJWLib.h.Msgs
+o.Flex:	C:Desk.h.Window
+o.Flex:	C:Desk.h.Wimp
+o.Flex:	C:Desk.h.WimpSWIs
+o.Flex:	C:Desk.h.Pointer
+o.Flex:	C:Desk.h.Icon
+o.Flex:	C:Desk.h.DragASpr
+o.Flex:	C:Desk.h.Coord
+o.Flex:	C:Desk.h.Core
+o.Flex:	C:Desk.h.Icon
+o.Flex:	C:AJWLib.h.Error2

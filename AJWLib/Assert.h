@@ -1,3 +1,5 @@
+#ifndef ASSERT_H
+#define ASSERT_H
 
 #ifdef AJWLIB_ASSERT_NONE
 
@@ -24,3 +26,6 @@
 	
 	#endif
 #endif
+
+#endif
+
