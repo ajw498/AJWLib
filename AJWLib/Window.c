@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.5  2000/02/13 15:48:23  uid1
+	Re-enabled files
+	
 	Revision 1.3  1999/10/09 18:43:30  AJW
 	Added AJWLib_ prefix
 	
@@ -16,9 +19,18 @@
 */
 #include "Desk.WimpSWIs.h"
 #include "Desk.Msgs.h"
+#include "Desk.Menu.h"
 #include "Desk.Str.h"
+#include "Desk.Screen.h"
 
 #include <string.h>
+
+void AJWLib_Window_OpenTransient(Desk_window_handle win)
+{
+	Desk_window_state blk;
+	Desk_Wimp_GetWindowState(win,&blk);
+	Desk_Wimp_CreateMenu((Desk_menu_ptr)win,(Desk_screen_size.x-blk.openblock.screenrect.max.x+blk.openblock.screenrect.min.x)/2,(Desk_screen_size.y+blk.openblock.screenrect.max.y-blk.openblock.screenrect.min.y)/2);
+}
 
 Desk_window_handle AJWLib_Window_CreateInfoWindow(char *name,char *purpose,char *author,char *version)
 {

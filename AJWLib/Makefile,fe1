@@ -35,10 +35,10 @@ INCLUDE	=	L:
 
 TARGET		=	AJWLib.o
 
-CCFLAGS		=	-I$(INCLUDE) -mthrowback -O3
+CCFLAGS		=	-I$(INCLUDE) -mstubs -mthrowback -Wall -O3
 LINKFLAGS	=-s
 
-CC		=	gcc -c $(CCFLAGS) -mstubs
+CC		=	gcc -c $(CCFLAGS) 
 LINK		=	MakeALF $(LINKFLAGS)
 
 .c.o: $(HEADERS)
