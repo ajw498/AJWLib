@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.7  2001/06/11 11:46:08  AJW
+	Added AJWLib_Menu_FullFullDispose
+	
 	Revision 1.6  2000/11/11 19:02:26  AJW
 	Fixed small bug in Menu_FullDispose
 	
@@ -190,8 +193,8 @@ void AJWLib_Menu_Release(Desk_menu_ptr menu)
 			Desk_Event_Release(Desk_event_CLICK,data->window,data->icon,AJWLib_Menu_ClickHandler,data);
 			if (data->popupicon!=-1) Desk_Event_Release(Desk_event_CLICK,data->window,data->popupicon,AJWLib_Menu_ClickHandler,data);
 			if (previous) previous->next=data->next; else attachhead=data->next;
-			Desk_DeskMem_Free(data);
 			data=temp->next;
+			Desk_DeskMem_Free(temp);
 		} else {
 			previous=data;
 			data=data->next;
