@@ -3,6 +3,10 @@
 	©Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/09 18:42:03  AJW
+	Modfied to use Desk
+	Added AJWLib_ prefix
+
 	Revision 1.1  1999/10/04 15:19:02  AJW
 	Initial revision
 
@@ -130,13 +134,13 @@ static Desk_bool AJWLib_TaskWindow_Morio(Desk_event_pollblock *block, void *r)
 {
 	char temp[35];
 	if (status!=status_RUNNING) return Desk_TRUE;
-	if (killedfn!=NULL) (*killedfn)(Desk_FALSE);
 	status=status_FINISHED;
 	Desk_Icon_SetText(master,1,"Close");
 	Desk_Icon_SetShade(master,0,Desk_TRUE);
 	strcpy(temp,description);
 	strcat(temp," (Finished)");
 	Desk_Icon_SetText(master,2,temp);
+	if (killedfn!=NULL) (*killedfn)(Desk_FALSE);
 	return Desk_TRUE;
 }
 
@@ -146,6 +150,7 @@ static Desk_bool AJWLib_TaskWindow_Ego(Desk_event_pollblock *block, void *r)
 	child=block->data.message.header.sender;
 	status=status_RUNNING;
 	Desk_Pane_Show(master,Desk_open_WHEREVER);
+	AJWLib_Pane_BringToFront(master);
 	AJWLib_Flex_Alloc((flex_ptr)&(text[0]),72);
 	numberoflines=1;
 	text[0][0]='\0';
