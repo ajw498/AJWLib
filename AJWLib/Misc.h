@@ -1,5 +1,5 @@
 
 extern void Beep(void);
 
-extern void ReturnMessage(event_pollblock *block);
-
+/*extern void ReturnMessage(Desk_event_pollblock *block);
+*/
