@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/03 00:21:53  AJW
+	Modified to use Desk
+
 	Revision 1.1  1999/10/02 23:07:20  AJW
 	Initial revision
 
@@ -58,11 +61,11 @@ static Desk_bool Menu_Handler(Desk_event_pollblock *block,void *reference)
 	for (i=0;i<numberofmenus;i++) {
 		if (menus[i].menu==currentmenu) {
 			found=Desk_TRUE;
+			selectfn=menus[i].selectfn;
 			i=numberofmenus;
 		}
 	}
 	if (!found) return Desk_FALSE;
-	selectfn=menus[i].selectfn;
 	if (selectfn!=NULL) (*selectfn)(entry,menus[i].reference);
 	Menu_CheckAdjust();
 	return Desk_TRUE;
@@ -75,13 +78,13 @@ Desk_menu_ptr Menu_Create(char *title,char *desc,menufn selectfn,void *reference
 	static Desk_bool registered=Desk_FALSE;
 	handle=Desk_Menu_New(title,desc);
 	if (handle==NULL) return NULL;
-	newmenus=Desk_DeskMem_Realloc(menus,(++numberofmenus)*sizeof(menu_struct));
+	newmenus=realloc(menus,(++numberofmenus)*sizeof(menu_struct));
 	menus=newmenus;
 	menus[numberofmenus-1].menu=handle;
 	menus[numberofmenus-1].selectfn=selectfn;
 	menus[numberofmenus-1].reference=reference;
 	if (!registered) {
-		Desk_Error2_CheckBOOL(Desk_Event_Claim(Desk_event_MENU,Desk_event_ANY,Desk_event_ANY,Menu_Handler,NULL));
+		Desk_Event_Claim(Desk_event_MENU,Desk_event_ANY,Desk_event_ANY,Menu_Handler,NULL);
 		registered=Desk_TRUE;
 	}
 	return handle;
@@ -119,7 +122,7 @@ void Menu_Attach(Desk_window_handle window,Desk_icon_handle icon,Desk_menu_ptr m
 	data->menu=menu;
 	data->button=button;
 	data->popupicon=(Desk_icon_handle)-1;
-	Desk_Error2_CheckBOOL(Desk_Event_Claim(Desk_event_CLICK,window,icon,Menu_ClickHandler,data));
+	Desk_Event_Claim(Desk_event_CLICK,window,icon,Menu_ClickHandler,data);
 }
 
 void Menu_AttachPopup(Desk_window_handle window,Desk_icon_handle popupicon,Desk_icon_handle dataicon,Desk_menu_ptr menu,int button)
@@ -128,8 +131,8 @@ void Menu_AttachPopup(Desk_window_handle window,Desk_icon_handle popupicon,Desk_
 	data->menu=menu;
 	data->button=button;
 	data->popupicon=popupicon;
-	Desk_Error2_CheckBOOL(Desk_Event_Claim(Desk_event_CLICK,window,popupicon,Menu_ClickHandler,data));
-	Desk_Error2_CheckBOOL(Desk_Event_Claim(Desk_event_CLICK,window,dataicon,Menu_ClickHandler,data));
+	Desk_Event_Claim(Desk_event_CLICK,window,popupicon,Menu_ClickHandler,data);
+	Desk_Event_Claim(Desk_event_CLICK,window,dataicon,Menu_ClickHandler,data);
 }
 
 void Menu_ToggleTick(Desk_menu_ptr menu,int entry)
