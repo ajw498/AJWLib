@@ -3,6 +3,9 @@
 	©Alex Waugh 2001
 
 	$Log: not supported by cvs2svn $
+	Revision 1.1  2001/05/12 17:42:26  AJW
+	Added ColourPicker files
+	
 
 */
 #include "Desk/DeskMem.h"
@@ -12,6 +15,8 @@
 #include "Desk/Event.h"
 #include "Desk/EventMsg.h"
 #include "Desk/Error2.h"
+
+#include "AJWLib/Assert.h"
 
 #include "ColourPicker.h"
 
@@ -23,15 +28,23 @@
 #define AJWLib_colourpicker_RESETCOLOURREQUEST 0x47704
 
 static int lastinitcolour=0;
-static Desk_window_handle windowhandle;
+static Desk_window_handle windowhandle=0;
 
 static Desk_bool AJWLib_ColourPicker_MenusDeleted(Desk_event_pollblock *block,void *ref)
 {
 	Desk_UNUSED(ref);
 	Desk_UNUSED(block);
 
+	AJWLib_Assert(windowhandle!=0);
+
 	Desk_Event_ReleaseWindow(windowhandle);
+
+	Desk_EventMsg_ReleaseMessage((Desk_message_action)AJWLib_colourpicker_COLOURCHOICE);
+	Desk_EventMsg_ReleaseMessage((Desk_message_action)AJWLib_colourpicker_CLOSEDIALOGUEREQUEST);
+	Desk_EventMsg_ReleaseMessage((Desk_message_action)AJWLib_colourpicker_RESETCOLOURREQUEST);
+
 	Desk_EventMsg_Release(Desk_message_MENUSDELETED,Desk_event_ANY,AJWLib_ColourPicker_MenusDeleted);
+	windowhandle=0;
 	return Desk_TRUE;
 }
 
@@ -67,8 +80,6 @@ AJWLib_colourpicker_handle AJWLib_ColourPicker_Open(AJWLib_colourpicker_type typ
 {
 	int blk[10];
 	AJWLib_colourpicker_handle handle;
-	Desk_window_handle window;
-	static Desk_bool registered=Desk_FALSE;
 
 	blk[0]=colournone & 1;
 	blk[1]=(int)title; /*Evil cast*/
@@ -80,16 +91,13 @@ AJWLib_colourpicker_handle AJWLib_ColourPicker_Open(AJWLib_colourpicker_type typ
 	blk[7]=0;
 	blk[8]=initcolour;
 	blk[9]=0;
-	Desk_Error2_CheckOS(Desk_SWI(2,2,SWI_ColourPicker_OpenDialogue,type,blk,&handle,&window));
+	Desk_Error2_CheckOS(Desk_SWI(2,2,SWI_ColourPicker_OpenDialogue,type,blk,&handle,&windowhandle));
 	lastinitcolour=initcolour;
-	if (!registered) {
-		Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_COLOURCHOICE,Desk_event_ANY,handler,ref);
-		Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_CLOSEDIALOGUEREQUEST,Desk_event_ANY,AJWLib_ColourPicker_CloseRequest,NULL);
-		Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_RESETCOLOURREQUEST,Desk_event_ANY,AJWLib_ColourPicker_ResetColourRequest,NULL);
-		if (type & 1) Desk_EventMsg_Claim(Desk_message_MENUSDELETED,Desk_event_ANY,AJWLib_ColourPicker_MenusDeleted,NULL);
-		Desk_Event_Claim(Desk_event_KEY,window,Desk_event_ANY,AJWLib_ColourPicker_Handler,NULL);
-		Desk_Event_Claim(Desk_event_REDRAW,window,Desk_event_ANY,AJWLib_ColourPicker_Handler,NULL);
-		registered=Desk_TRUE;
-	}
+	Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_COLOURCHOICE,Desk_event_ANY,handler,ref);
+	Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_CLOSEDIALOGUEREQUEST,Desk_event_ANY,AJWLib_ColourPicker_CloseRequest,NULL);
+	Desk_EventMsg_Claim((Desk_message_action)AJWLib_colourpicker_RESETCOLOURREQUEST,Desk_event_ANY,AJWLib_ColourPicker_ResetColourRequest,NULL);
+	if (type & 1) Desk_EventMsg_Claim(Desk_message_MENUSDELETED,Desk_event_ANY,AJWLib_ColourPicker_MenusDeleted,NULL);
+	Desk_Event_Claim(Desk_event_KEY,windowhandle,Desk_event_ANY,AJWLib_ColourPicker_Handler,NULL);
+	Desk_Event_Claim(Desk_event_REDRAW,windowhandle,Desk_event_ANY,AJWLib_ColourPicker_Handler,NULL);
 	return handle;
 }
