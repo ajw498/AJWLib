@@ -342,34 +342,6 @@ o.Window:	C:Desk.h.DeskMem
 o.Window:	C:Desk.h.Str
 o.Window:	C:Desk.h.Screen
 o.Window:	C:Desk.h.KeyCodes
-o.Font:	c.Font
-o.Font:	C:Desk.h.Font
-o.Font:	C:Desk.h.Core
-o.Font:	C:h.kernel
-o.Font:	C:Desk.h.Wimp
-o.Font:	C:Desk.h.Error2
-o.Font:	C:Desk.h.Error
-o.Font:	C:Desk.h.JumpRaw
-o.Font:	C:Desk.h.Debug
-o.Font:	C:Desk.h.SWI
-o.Font:	C:AJWLib.h.Font
-mc.Font:	c.Font
-mc.Font:	C:Desk.h.Font
-mc.Font:	C:Desk.h.Core
-mc.Font:	C:h.stddef
-mc.Font:	C:h.kernel
-mc.Font:	C:Desk.h.Wimp
-mc.Font:	C:Desk.h.Error2
-mc.Font:	C:h.stdio
-mc.Font:	C:h.stdarg
-mc.Font:	C:Desk.h.Error
-mc.Font:	C:Desk.h.JumpRaw
-mc.Font:	C:h.setjmp
-mc.Font:	C:Desk.h.Debug
-mc.Font:	C:h.stdio
-mc.Font:	C:h.stdarg
-mc.Font:	C:Desk.h.SWI
-mc.Font:	C:AJWLib.h.Font
 o.Draw:	c.Draw
 o.Draw:	C:Desk.h.SWI
 o.Draw:	C:Desk.h.Core
@@ -389,4 +361,6 @@ mc.TaskWindow: c.TaskWindow C:Desk.h.Window C:Desk.h.Wimp C:Desk.h.Core C:h.stdd
 mc.ColourPicker: c.ColourPicker C:Desk.h.DeskMem C:h.stdlib C:h.stddef C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.KernelSWIs C:Desk.h.SWI C:Desk.h.Icon C:Desk.h.Wimp C:Desk.h.DragASpr C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:AJWLib.h.Assert h.ColourPicker
 o.ColourPicker: c.ColourPicker C:Desk.h.DeskMem C:Desk.h.Core C:h.kernel C:Desk.h.KernelSWIs C:Desk.h.SWI C:Desk.h.Icon C:Desk.h.Wimp C:Desk.h.DragASpr C:Desk.h.Event C:Desk.h.EventMsg C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:AJWLib.h.Assert h.ColourPicker
 o.Menu: c.Menu C:Desk.h.WimpSWIs C:Desk.h.Core C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.Error2 C:Desk.h.DeskMem C:Desk.h.Menu C:Desk.h.Event C:Desk.h.Msgs C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Screen h.Menu
+o.Font: c.Font C:Desk.h.Font C:Desk.h.Core C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:Desk.h.Error C:Desk.h.JumpRaw C:Desk.h.Debug C:Desk.h.SWI C:AJWLib.h.Font
 mc.Menu: c.Menu C:Desk.h.WimpSWIs C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:Desk.h.Error2 C:Desk.h.DeskMem C:h.stdlib C:h.stddef C:Desk.h.Menu C:Desk.h.Event C:Desk.h.Msgs C:Desk.h.Icon C:Desk.h.DragASpr C:Desk.h.Screen h.Menu C:h.stdlib
+mc.Font: c.Font C:Desk.h.Font C:Desk.h.Core C:h.stddef C:h.kernel C:Desk.h.Wimp C:Desk.h.Error2 C:h.stdio C:h.stdarg C:Desk.h.Error C:Desk.h.JumpRaw C:h.setjmp C:Desk.h.Debug C:h.stdio C:h.stdarg C:Desk.h.SWI C:AJWLib.h.Font

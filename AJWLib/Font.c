@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.5  2000/11/22 23:13:44  AJW
+	Changed to a more accurate method of finding bounding boxes
+	
 	Revision 1.4  2000/02/26 20:19:52  uid1
 	Added GetWidthAndHeight from a font handle
 	
@@ -47,6 +50,21 @@ Desk_wimp_point *AJWLib_Font_GetWidthAndHeightGiven(const char *font,const int s
 	Desk_Font_FindFont(&handle,font,size,size,0,0);
 	Desk_Error2_CheckOS(Desk_SWI(6,0,SWI_Font_ScanString,handle,str,(1<<5)+(1<<8)+(1<<18),INFINITY,INFINITY,block));
 	Desk_Font_ConverttoOS(block[7]-block[5],block[8]-block[6],&coords.x,&coords.y);
+	Desk_Font_LoseFont(handle);
+	return &coords;
+}
+
+Desk_wimp_rect *AJWLib_Font_GetBBoxGiven(const char *font,const int size,const char *str)
+/*Returns the width and height in OS units of a string in a given font. size is in sixteenths of a point*/
+{
+	Desk_font_handle handle;
+	static Desk_wimp_rect coords;
+	int block[]={0,0,0,0,-1,0,0,0,0};
+
+	Desk_Font_FindFont(&handle,font,size,size,0,0);
+	Desk_Error2_CheckOS(Desk_SWI(6,0,SWI_Font_ScanString,handle,str,(1<<5)+(1<<8)+(1<<18),INFINITY,INFINITY,block));
+	Desk_Font_ConverttoOS(block[7],block[8],&coords.max.x,&coords.max.y);
+	Desk_Font_ConverttoOS(block[5],block[6],&coords.min.x,&coords.min.y);
 	Desk_Font_LoseFont(handle);
 	return &coords;
 }
