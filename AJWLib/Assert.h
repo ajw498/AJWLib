@@ -7,7 +7,7 @@
 	#define AJWLib_AssertWarning(x)
 
 #else
-	#ifdef AJWLIB_ASSERT_ERROR2
+	#ifndef AJWLIB_ASSERT_ERROR2
 	
 		#define AJWLib_Assert(x) if (!(x)) Desk_Error2_HandleText("Assertion failed. (" #x ") "Desk_error_PLACE);
 		
