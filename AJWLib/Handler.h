@@ -1,1 +1,1 @@
-extern BOOL Handler_KeyPress(event_pollblock *block,void *r);
+extern Desk_bool Handler_KeyPress(Desk_event_pollblock *block,void *r);
