@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  2000/01/11 16:24:43  AJW
+	Changed name of function
+
 	Revision 1.1  1999/10/11 20:27:38  AJW
 	Initial revision
 
@@ -17,7 +20,7 @@
 #include "kernel.h"
 
 FILE *AJWLib_File_fopen(const char *filename,const char *mode)
-/*Same as fopen(), but guarantees a valid file pointer, or creates and error2*/
+/*Same as fopen(), but guarantees a valid file pointer, or creates an error2*/
 {
 	FILE *file;
 	file=fopen(filename,mode);
@@ -27,3 +30,22 @@ FILE *AJWLib_File_fopen(const char *filename,const char *mode)
 	}
 	return file;
 }
+
+void AJWLib_File_fread(void *ptr,size_t size,size_t nobj,FILE *stream)
+/*Same as fread(), but gives an error2 if needed*/
+{
+	if (nobj!=fread(ptr,size,nobj,stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+}
+
+void AJWLib_File_fwrite(void *ptr,size_t size,size_t nobj,FILE *stream)
+/*Same as fwrite(), but gives an error2 if needed*/
+{
+	if (nobj!=fwrite(ptr,size,nobj,stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+}
+
+void AJWLib_File_fclose(FILE *stream)
+/*Same as fclose(), but gives an error2 if needed*/
+{
+	if (fclose(stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+}
+
