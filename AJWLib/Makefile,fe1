@@ -38,7 +38,7 @@ MCOBJECTS	=	\
 		mc.Font\
 		mc.ColourPicker
 
-INCLUDE	=	-IAJWLib: -IDesk:
+INCLUDE	=	-IAJWLib: -IDesk: -IC:
 
 .SUFFIXES: .c .o .mc
 
@@ -48,7 +48,7 @@ LINKFLAGS	= -c
 CC		=	cc -c $(CCFLAGS)
 LINK		=	libfile $(LINKFLAGS)
 
-all: AJWLib.o
+all: ^.o.AJWLib
 
 .c.o:
 	$(CC) $< -o $@
@@ -56,10 +56,10 @@ all: AJWLib.o
 .c.mc:
 	MemCheck.cc $(CC) -g $< -o $@
 
-AJWLib.o:	$(OBJECTS)
+^.o.AJWLib:	$(OBJECTS)
 	$(LINK) -o $@ $(OBJECTS)
 
-mc.AJWLib:	$(MCOBJECTS)
+^.mc.AJWLib:	$(MCOBJECTS)
 	$(LINK) -o $@ $(MCOBJECTS)
 
 MemCheckFlex.o: MemCheckFlex.c MemCheckFlex.h
