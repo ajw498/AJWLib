@@ -3,19 +3,21 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.1  1999/10/02 23:08:53  AJW
+	Initial revision
+
 
 */
-#include "DeskLib:WimpSWIs.h"
-#include "DeskLib:Pane.h"
-#include "AJWLib:Window.h"
+#include "Desk.WimpSWIs.h"
+#include "Desk.Pane.h"
 
-void Pane_BringToFront(window_handle master)
+void Pane_BringToFront(Desk_window_handle master)
 {
-	pane_data *data;
-	window_state state;
-	data=Pane_GetSysHandle(master);
-	Window_BringToFront(data->pane);
-	Wimp_GetWindowState(master,&state);
+	Desk_pane_data *data;
+	Desk_window_state state;
+	data=Desk_Pane_GetSysHandle(master);
+	Desk_Window_BringToFront(data->pane);
+	Desk_Wimp_GetWindowState(master,&state);
 	state.openblock.behind=data->pane;
-	Wimp_OpenWindow(&state.openblock);
+	Desk_Wimp_OpenWindow(&state.openblock);
 }
