@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.3  2000/01/11 17:00:52  AJW
+	Added fread,fwrite,fclose
+
 	Revision 1.2  2000/01/11 16:24:43  AJW
 	Changed name of function
 
@@ -25,7 +28,7 @@ FILE *AJWLib_File_fopen(const char *filename,const char *mode)
 	FILE *file;
 	file=fopen(filename,mode);
 	if (file==NULL) {
-		Desk_Error2_CheckOS(_kernel_last_oserror());
+		Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
 		exit(EXIT_FAILURE);
 	}
 	return file;
@@ -34,18 +37,18 @@ FILE *AJWLib_File_fopen(const char *filename,const char *mode)
 void AJWLib_File_fread(void *ptr,size_t size,size_t nobj,FILE *stream)
 /*Same as fread(), but gives an error2 if needed*/
 {
-	if (nobj!=fread(ptr,size,nobj,stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+	if (nobj!=fread(ptr,size,nobj,stream)) Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
 }
 
 void AJWLib_File_fwrite(void *ptr,size_t size,size_t nobj,FILE *stream)
 /*Same as fwrite(), but gives an error2 if needed*/
 {
-	if (nobj!=fwrite(ptr,size,nobj,stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+	if (nobj!=fwrite(ptr,size,nobj,stream)) Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
 }
 
 void AJWLib_File_fclose(FILE *stream)
 /*Same as fclose(), but gives an error2 if needed*/
 {
-	if (fclose(stream)) Desk_Error2_CheckOS(_kernel_last_oserror());
+	if (fclose(stream)) Desk_Error2_CheckOS((Desk_os_error *)_kernel_last_oserror());
 }
 
