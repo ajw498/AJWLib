@@ -3,19 +3,23 @@
 	©Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.1  1999/10/02 23:09:27  AJW
+	Initial revision
+
 
 */
 
-#include "DeskLib:Window.h"
-#include "DeskLib:Error.h"
-#include "DeskLib:Event.h"
-#include "DeskLib:EventMsg.h"
-#include "DeskLib:Icon.h"
-#include "DeskLib:Screen.h"
-#include "DeskLib:Drag.h"
-#include "DeskLib:File.h"
-#include "DeskLib:Filing.h"
-#include "DeskLib:KeyCodes.h"
+#include "Desk.Window.h"
+#include "Desk.Error.h"
+#include "Desk.DeskMem.h"
+#include "Desk.Event.h"
+#include "Desk.EventMsg.h"
+#include "Desk.Icon.h"
+#include "Desk.Screen.h"
+#include "Desk.Drag.h"
+#include "Desk.File.h"
+#include "Desk.Filing.h"
+#include "Desk.KeyCodes.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -26,20 +30,20 @@
 #define icon_OK 2
 #define icon_CANCEL 3
 
-typedef BOOL (*save_handler)(char *filename,BOOL safe,BOOL selection,void *reference);
-
-static window_handle savewindow;
+typedef Desk_bool (*save_handler)(char *filename,Desk_bool safe,Desk_bool selection,void *reference);
+/*
+static Desk_window_handle savewindow;
 static int filetype=-99;
 static int estimatedsize;
-static BOOL selectionselected;
+static Desk_bool selectionselected;
 static save_handler savefile,saveram;
-static BOOL closewindow;
-static BOOL menu;
+static Desk_bool closewindow;
+static Desk_bool menu;
 
 void Save_ChangeFileType(int newfiletype)
 {
-	Error_ReportFatalInternal(1,"You cannot at present change the filetype once the window has been created");
-	/*Change file icon*/ /*Icon_FileIcon(...)?*/
+	Desk_Error_ReportFatalInternal(1,"You cannot at present change the filetype once the window has been created");
+	Change file icon Icon_FileIcon(...)?
 	filetype=newfiletype;
 }
 
@@ -50,136 +54,135 @@ void Save_ChangeEstimatedSize(int newsize)
 
 void Save_ChangeDefaultFilename(char *newname)
 {
-	Icon_SetText(savewindow,icon_FILENAME,newname);
+	Desk_Icon_SetText(savewindow,icon_FILENAME,newname);
 }
 
 static void Save_CloseWindow(void)
 {
-	if (closewindow==FALSE) return;
-	if (menu) Wimp_CreateMenu((menu_block *)-1,0,0); else Window_Hide(savewindow);
+	if (closewindow==Desk_FALSE) return;
+	if (menu) Desk_Wimp_CreateMenu((Desk_menu_block *)-1,0,0); else Desk_Window_Hide(savewindow);
 }
 
 static void Save_DragEnded(void *r)
 {
-	mouse_block mouseblk;
-	message_block msgblk;
+	Desk_mouse_block mouseblk;
+	Desk_message_block msgblk;
 	char leafname[256];
-	selectionselected=FALSE;
-	Wimp_GetPointerInfo(&mouseblk);
+	selectionselected=Desk_FALSE;
+	Desk_Wimp_GetPointerInfo(&mouseblk);
 	msgblk.header.size=56;
 	msgblk.header.yourref=0;
-	msgblk.header.action=message_DATASAVE;
+	msgblk.header.action=Desk_message_DATASAVE;
 	msgblk.data.datasave.window=mouseblk.window;
 	msgblk.data.datasave.icon=mouseblk.icon;
 	msgblk.data.datasave.pos=mouseblk.pos;
 	msgblk.data.datasave.estsize=estimatedsize;
 	msgblk.data.datasave.filetype=filetype;
-	Filing_GetLeafname(Icon_GetTextPtr(savewindow,icon_FILENAME),leafname);
+	Desk_Filing_GetLeafname(Desk_Icon_GetTextPtr(savewindow,icon_FILENAME),leafname);
 	if (strlen(leafname)>200) leafname[200]='\0';
 	strcpy(msgblk.data.datasave.leafname,leafname);
-	Wimp_SendMessage(event_USERMESSAGERECORDED,&msgblk,mouseblk.window,mouseblk.icon);
+	Desk_Wimp_SendMessage(Desk_event_USERMESSAGERECORDED,&msgblk,mouseblk.window,mouseblk.icon);
 }
 
-static BOOL Save_DataSaveAck(event_pollblock *block,void *r)
+static Desk_bool Save_DataSaveAck(Desk_event_pollblock *block,void *r)
 {
-	BOOL safe=TRUE;
-	if (block->data.message.data.datasaveack.estsize==-1) safe=FALSE;
+	Desk_bool safe=Desk_TRUE;
+	if (block->data.message.data.datasaveack.estsize==-1) safe=Desk_FALSE;
 	(*savefile)(block->data.message.data.datasaveack.filename,safe,selectionselected,r);
 	block->data.message.header.yourref=block->data.message.header.myref;
-	block->data.message.header.action=message_DATALOAD;
-	Wimp_SendMessage(event_USERMESSAGERECORDED,&block->data.message,block->data.message.header.sender,0);
-	return TRUE;
+	block->data.message.header.action=Desk_message_DATALOAD;
+	Desk_Wimp_SendMessage(Desk_event_USERMESSAGERECORDED,&block->data.message,block->data.message.header.sender,0);
+	return Desk_TRUE;
 }
 
-static BOOL Save_DataLoadAck(event_pollblock *block,void *r)
+static Desk_bool Save_DataLoadAck(Desk_event_pollblock *block,void *r)
 {
 	Save_CloseWindow();
-	return TRUE;
+	return Desk_TRUE;
 }
 
-static BOOL Save_MessageAck(event_pollblock *block,void *r)
+static Desk_bool Save_MessageAck(Desk_event_pollblock *block,void *r)
 {
 	switch (block->data.message.header.action) {
-		case message_DATASAVE:
-			/*Do nothing*/
+		case Desk_message_DATASAVE:
 			break;
-		case message_DATALOAD:
-			Error_Report(1,"Data transfer failed: Reciever died");
+		case Desk_message_DATALOAD:
+			Desk_Error_Report(1,"Data transfer failed: Reciever died");
 			break;
 		default:
-			return FALSE;
+			return Desk_FALSE;
 	}
-	return TRUE;
+	return Desk_TRUE;
 }
 
-static BOOL Save_FileDragged(event_pollblock *block,void *r)
+static Desk_bool Save_FileDragged(Desk_event_pollblock *block,void *r)
 {
-	if (block->data.mouse.button.data.dragselect==FALSE && block->data.mouse.button.data.dragadjust==FALSE) return FALSE;
-	Icon_StartSolidDrag(block->data.mouse.window,icon_FILE);
-	Drag_SetHandlers(NULL,Save_DragEnded,r);
-	if (block->data.mouse.button.data.dragselect) closewindow=TRUE; else closewindow=FALSE;
-	return TRUE;
+	if (block->data.mouse.button.data.dragselect==Desk_FALSE && block->data.mouse.button.data.dragadjust==Desk_FALSE) return Desk_FALSE;
+	Desk_Icon_StartSolidDrag(block->data.mouse.window,icon_FILE);
+	Desk_Drag_SetHandlers(NULL,Save_DragEnded,r);
+	if (block->data.mouse.button.data.dragselect) closewindow=Desk_TRUE; else closewindow=Desk_FALSE;
+	return Desk_TRUE;
 }
 
-static BOOL Save_OkPressed(event_pollblock *block,void *r)
+static Desk_bool Save_OkPressed(Desk_event_pollblock *block,void *r)
 {
 	char *filename;
-	if (block->data.mouse.button.data.menu) return FALSE;
-	filename=Icon_GetTextPtr(savewindow,icon_FILENAME);
+	if (block->data.mouse.button.data.menu) return Desk_FALSE;
+	filename=Desk_Icon_GetTextPtr(savewindow,icon_FILENAME);
 	if (strlen(filename)<1 || strpbrk(filename,".:")==NULL) {
-		Error_Report(1,"Enter a name for the file, then drag the icon to a directory display");
-		return TRUE;
+		Desk_Error_Report(1,"Enter a name for the file, then drag the icon to a directory display");
+		return Desk_TRUE;
 	}
-	(*savefile)(filename,TRUE,FALSE,r);
-	if (block->data.mouse.button.data.select) closewindow=TRUE; else closewindow=FALSE;
+	(*savefile)(filename,Desk_TRUE,Desk_FALSE,r);
+	if (block->data.mouse.button.data.select) closewindow=Desk_TRUE; else closewindow=Desk_FALSE;
 	Save_CloseWindow();
-	return TRUE;
+	return Desk_TRUE;
 }
 
-static BOOL Save_CancelPressed(event_pollblock *block,void *r)
+static Desk_bool Save_CancelPressed(Desk_event_pollblock *block,void *r)
 {
-	if (block->data.mouse.button.data.menu) return FALSE;
-	closewindow=TRUE;
+	if (block->data.mouse.button.data.menu) return Desk_FALSE;
+	closewindow=Desk_TRUE;
 	Save_CloseWindow();
-	return TRUE;
+	return Desk_TRUE;
 }
 
-static BOOL Save_KeyPressed(event_pollblock *block,void *r)
+static Desk_bool Save_KeyPressed(Desk_event_pollblock *block,void *r)
 {
 	char *filename;
 	switch (block->data.key.code) {
-		case keycode_RETURN:
-			filename=Icon_GetTextPtr(savewindow,icon_FILENAME);
+		case Desk_keycode_RETURN:
+			filename=Desk_Icon_GetTextPtr(savewindow,icon_FILENAME);
 			if (strlen(filename)<1 || strpbrk(filename,".:")==NULL) {
-				Error_Report(1,"Enter a name for the file, then drag the icon to a directory display");
-				return TRUE;
+				Desk_Error_Report(1,"Enter a name for the file, then drag the icon to a directory display");
+				return Desk_TRUE;
 			}
-            Icon_SetSelect(savewindow,icon_OK,TRUE);
-			(*savefile)(filename,TRUE,FALSE,r);
-			closewindow=TRUE;
+            Desk_Icon_SetSelect(savewindow,icon_OK,Desk_TRUE);
+			(*savefile)(filename,Desk_TRUE,Desk_FALSE,r);
+			closewindow=Desk_TRUE;
 			Save_CloseWindow();
-			Icon_SetSelect(savewindow,icon_OK,FALSE);
+			Desk_Icon_SetSelect(savewindow,icon_OK,Desk_FALSE);
 			break;
-		case keycode_ESCAPE:
-			Icon_SetSelect(savewindow,icon_CANCEL,TRUE);
-			closewindow=TRUE;
+		case Desk_keycode_ESCAPE:
+			Desk_Icon_SetSelect(savewindow,icon_CANCEL,Desk_TRUE);
+			closewindow=Desk_TRUE;
 			Save_CloseWindow();
-			Icon_SetSelect(savewindow,icon_CANCEL,FALSE);
+			Desk_Icon_SetSelect(savewindow,icon_CANCEL,Desk_FALSE);
             break;
 		default:
-			return FALSE;
+			return Desk_FALSE;
 	}
-	return TRUE;
+	return Desk_TRUE;
 }
 
-static window_handle Save_Create(void)
+static Desk_window_handle Save_Create(void)
 {
 	struct {
-		window_block win;
-		icon_block icons[4];
+		Desk_window_block win;
+		Desk_icon_block icons[4];
 	} blk;
-	window_handle handle;
-	char *buffer=malloc(256);
+	Desk_window_handle handle;
+	char *buffer=Desk_DeskMem_Malloc(256);
 	blk.win.screenrect.min.x=0;
 	blk.win.screenrect.min.y=-236;
 	blk.win.screenrect.max.x=268;
@@ -237,30 +240,29 @@ static window_handle Save_Create(void)
 	blk.icons[icon_CANCEL].data.indirecttext.buffer="Cancel";
 	blk.icons[icon_CANCEL].data.indirecttext.validstring="R5,3";
 	blk.icons[icon_CANCEL].data.indirecttext.bufflen=7;
-	if (buffer==NULL) Error_ReportFatal(1,"Out of memory");
 	buffer[0]='\0';
-	Wimp_CreateWindow(&(blk.win),&handle);
+	Desk_Wimp_CreateWindow(&(blk.win),&handle);
 	return handle;
 }
 
-window_handle Save_CreateWindow(int type,BOOL selectionbutton,int estsize,BOOL menuleaf,save_handler FileSave,save_handler RAMSave,void *reference)
+Desk_window_handle Save_CreateWindow(int type,Desk_bool selectionbutton,int estsize,Desk_bool menuleaf,save_handler FileSave,save_handler RAMSave,void *reference)
 {
-	if (filetype!=-99) Error_ReportFatalInternal(1,"You cannot call Save_CreateWindow twice");
+	if (filetype!=-99) Desk_Error_ReportFatalInternal(1,"You cannot call Save_CreateWindow twice");
 	filetype=type;
 	estimatedsize=estsize;
 	savefile=FileSave;
 	saveram=RAMSave;
 	menu=menuleaf;
-	Drag_Initialise(FALSE);
-	if (selectionbutton) Error_ReportFatalInternal(1,"Selection button in a save window is not supported yet"); 
-	if (RAMSave!=NULL) Error_ReportFatalInternal(1,"RAM Transfer is not yet supported");
+	Desk_Drag_Initialise(Desk_FALSE);
+	if (selectionbutton) Desk_Error_ReportFatalInternal(1,"Selection button in a save window is not supported yet"); 
+	if (RAMSave!=NULL) Desk_Error_ReportFatalInternal(1,"RAM Transfer is not yet supported");
 	savewindow=Save_Create();
-	Event_Claim(event_CLICK,savewindow,icon_FILE,Save_FileDragged,reference);
-	Event_Claim(event_CLICK,savewindow,icon_OK,Save_OkPressed,reference);
-	Event_Claim(event_CLICK,savewindow,icon_CANCEL,Save_CancelPressed,reference);
-	Event_Claim(event_KEY,savewindow,event_ANY,Save_KeyPressed,reference);
-	Event_Claim(event_USERMESSAGEACK,event_ANY,event_ANY,Save_MessageAck,reference);
-	EventMsg_Claim(message_DATASAVEACK,event_ANY,Save_DataSaveAck,reference);
-	EventMsg_Claim(message_DATALOADACK,event_ANY,Save_DataLoadAck,reference);
+	Desk_Event_Claim(Desk_event_CLICK,savewindow,icon_FILE,Save_FileDragged,reference);
+	Desk_Event_Claim(Desk_event_CLICK,savewindow,icon_OK,Save_OkPressed,reference);
+	Desk_Event_Claim(Desk_event_CLICK,savewindow,icon_CANCEL,Save_CancelPressed,reference);
+	Desk_Event_Claim(Desk_event_KEY,savewindow,Desk_event_ANY,Save_KeyPressed,reference);
+	Desk_Event_Claim(Desk_event_USERMESSAGEACK,Desk_event_ANY,Desk_event_ANY,Save_MessageAck,reference);
+	Desk_EventMsg_Claim(Desk_message_DATASAVEACK,Desk_event_ANY,Save_DataSaveAck,reference);
+	Desk_EventMsg_Claim(Desk_message_DATALOADACK,Desk_event_ANY,Save_DataLoadAck,reference);
 	return savewindow;
-}
+}*/
