@@ -2,23 +2,7 @@
 	AJWLib - Window
 	© Alex Waugh 1998
 
-	$Log: not supported by cvs2svn $
-	Revision 1.6  2000/02/13 21:39:16  uid1
-	Added Window_OpenTransient
-	Added -Wall to makefile
-	
-	Revision 1.5  2000/02/13 15:48:23  uid1
-	Re-enabled files
-	
-	Revision 1.3  1999/10/09 18:43:30  AJW
-	Added AJWLib_ prefix
-	
-	Revision 1.2  1999/10/03 00:40:42  AJW
-	Modified to use Desk
-
-	Revision 1.1  1999/10/02 23:10:51  AJW
-	Initial revision
-
+	$Id: Window.c,v 1.8 2000-02-28 20:20:14 uid1 Exp $
 
 */
 #include "Desk.WimpSWIs.h"
@@ -55,14 +39,14 @@ static Desk_bool AJWLib_Window_CancelClick(Desk_event_pollblock *block, void *re
 
 static Desk_bool AJWLib_Window_SaveClick(Desk_event_pollblock *block, void *ref)
 {
-	Desk_window_handle savewin=(Desk_window_handle)ref;
+	void (*savefn)(void)=ref;
 	if (!block->data.mouse.button.data.select) return Desk_FALSE;
 	Desk_Menu_Show((Desk_menu_ptr)-1,0,0);
-	if (savewin) AJWLib_Window_OpenTransient(savewin);
+	if (savefn) savefn();
 	return Desk_TRUE;
 }
 
-void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),Desk_window_handle savewin)
+void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_icon_handle cancel,Desk_icon_handle save,void (*discardfn)(void),void (*savefn)(void))
 /*Open Discard/Cancel[/Save] window as a transient. Set discardfn to NULL to quit task if discard pressed, and icon to -1 to ignore it*/
 {
 	static Desk_bool registered=Desk_FALSE;
@@ -70,7 +54,7 @@ void AJWLib_Window_OpenDCS(Desk_window_handle win,Desk_icon_handle discard,Desk_
 		registered=Desk_TRUE;
 		if (discard!=-1) Desk_Event_Claim(Desk_event_CLICK,win,discard,AJWLib_Window_DiscardClick,discardfn);
 		if (cancel!=-1) Desk_Event_Claim(Desk_event_CLICK,win,cancel,AJWLib_Window_CancelClick,NULL);
-		if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,(void *)savewin);
+		if (save!=-1) Desk_Event_Claim(Desk_event_CLICK,win,save,AJWLib_Window_SaveClick,savefn);
 	}
 	AJWLib_Window_OpenTransient(win);
 }
