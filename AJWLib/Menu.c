@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.8  2001/06/11 15:36:11  AJW
+	Fixed bug in menu releasing
+	
 	Revision 1.7  2001/06/11 11:46:08  AJW
 	Added AJWLib_Menu_FullFullDispose
 	
@@ -38,6 +41,7 @@
 #include "Menu.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 
 typedef struct menu_struct {
@@ -247,4 +251,23 @@ void AJWLib_Menu_ToggleShade(Desk_menu_ptr menu,int entry)
 	int tick,shade;
 	Desk_Menu_GetFlags(menu,entry,&tick,&shade);
 	Desk_Menu_SetFlags(menu,entry,tick,!shade);
+}
+
+char *AJWLib_Menu_GetText(Desk_menu_ptr menu, int entry)
+/*Altered version of Desk_Menu_GetText*/
+{
+  char      *text;
+  static char nonind[]="123456789012";
+  Desk_menu_item *item = (Desk_menu_item*) (((int) menu) + sizeof(Desk_menu_block));
+
+  item = &item[entry];
+
+  if (item->iconflags.data.indirected)
+    text = item->icondata.indirecttext.buffer;
+  else {
+  	text = nonind;
+    strncpy(nonind,item->icondata.text,12);
+  }
+
+  return text;
 }

@@ -6,6 +6,8 @@
 #define AJWLib_Menu_Tick(x,y) Desk_Menu_SetFlags(x,y,Desk_TRUE,Desk_FALSE)
 #define AJWLib_Menu_UnTick(x,y) Desk_Menu_SetFlags(x,y,Desk_FALSE,Desk_FALSE)
 
+#define Desk_Menu_GetText(x,y) AJWLib_Menu_GetText(x,y)
+
 typedef void (*AJWLib_menufn)(int entry,void *reference);
 
 Desk_menu_ptr AJWLib_Menu_Create(char *title,char *desc,AJWLib_menufn selectfn,void *reference);
@@ -29,6 +31,8 @@ void AJWLib_Menu_CheckAdjust(void);
 void AJWLib_Menu_ToggleTick(Desk_menu_ptr menu,int entry);
 
 void AJWLib_Menu_ToggleShade(Desk_menu_ptr menu,int entry);
+
+char *AJWLib_Menu_GetText(Desk_menu_ptr menu, int entry);
 
 #endif
 
