@@ -55,3 +55,6 @@ Drawfile.o:
 
 MemCheckFlex.o: MemCheckFlex.c MemCheckFlex.h
 	cc -jC: -IL: -throwback -fah -Otime -c MemCheckFlex.c -o MemCheckFlex.o
+
+Error2.o: Error2.c Error2.h
+	cc -jC: -IL: -throwback -fah -Otime -c Error2.c -o Error2.o

@@ -4,19 +4,7 @@
 	Desk_Error2_SetHandler(AJWLib_Error2_ReportFatal); \
 }
 
-#define AJWLib_Error2_HandleMsgs(tag) Desk_Error2_HandleText(AJWLib_Msgs_TempLookup(tag))
-
-#define AJWLib_Error2_HandleMsgs2(tag,x) { \
-	char buffer[256]; \
-	sprintf(buffer,AJWLib_Msgs_TempLookup(tag),x); \
-	Desk_Error2_HandleText(buffer); \
-}
-
-#define AJWLib_Error2_HandleMsgs3(tag,x,y) { \
-	char buffer[256]; \
-	sprintf(buffer,AJWLib_Msgs_TempLookup(tag),x,y); \
-	Desk_Error2_HandleText(buffer); \
-}
+void AJWLib_Error2_HandleMsgs(char *tag,...);
 
 #define AJWLib_Error2_ReportMsgs(tag) Desk_Msgs_Report(1,tag,AJWLib_Error2_Describe(&Desk_Error2_globalblock))
 
