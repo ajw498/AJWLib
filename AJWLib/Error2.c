@@ -6,6 +6,7 @@
 #include "Desk.Msgs.h"
 
 char* AJWLib_Error2_Describe(Desk_error2_block* error)
+/* Copied from Desk and modified */
 {
 	static char buffer[256];
 	if (error->type==Desk_error2_type_MISC)
