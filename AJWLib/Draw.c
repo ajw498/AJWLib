@@ -3,6 +3,9 @@
 	© Alex Waugh 1999
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/02 23:52:01  AJW
+	Modified to use Desk
+
 	Revision 1.1  1999/10/02 19:10:16  AJW
 	Initial revision
 
@@ -11,9 +14,9 @@
 
 #include "Desk.SWI.h"
 #include "Desk.Error2.h"
-#include "AJWLib:Drawfile.h"
+#include "AJWLib.Drawfile.h"
 
-void Draw_CreateRectanglePath(int x,int y,int width,int height,int *block)
+void AJWLib_Draw_CreateRectanglePath(int x,int y,int width,int height,int *block)
 {
 	block[0]=2;
 	block[1]=x;
@@ -32,7 +35,7 @@ void Draw_CreateRectanglePath(int x,int y,int width,int height,int *block)
 	block[14]=1;
 }
 
-void Draw_CreateLinePath(int x0,int y0,int x1,int y1,int *block)
+void AJWLib_Draw_CreateLinePath(int x0,int y0,int x1,int y1,int *block)
 {
 	block[0]=2;
 	block[1]=x0;
@@ -45,24 +48,24 @@ void Draw_CreateLinePath(int x0,int y0,int x1,int y1,int *block)
 	block[8]=1;
 }
 
-void Draw_PlotLine(int x0,int y0,int x1,int y1,int thickness,os_trfm *matrix)
+void AJWLib_Draw_PlotLine(int x0,int y0,int x1,int y1,int thickness,os_trfm *matrix)
 {
 	int block[10];
-	Draw_CreateLinePath(x0,y0,x1,y1,block);
+	AJWLib_Draw_CreateLinePath(x0,y0,x1,y1,block);
 	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0,matrix,0,thickness,0,0));
 }
 
-void Draw_PlotRectangle(int x,int y,int width,int height,int thickness,os_trfm *matrix)
+void AJWLib_Draw_PlotRectangle(int x,int y,int width,int height,int thickness,os_trfm *matrix)
 {
 	int block[16];
-	Draw_CreateRectanglePath(x,y,width,height,block);
+	AJWLib_Draw_CreateRectanglePath(x,y,width,height,block);
 	Desk_Error2_CheckOS(Desk_SWI(7,0,Desk_SWI_Draw_Stroke,block,0,matrix,0,thickness,0,0));
 }
 
-void Draw_PlotRectangleFilled(int x,int y,int width,int height,os_trfm *matrix)
+void AJWLib_Draw_PlotRectangleFilled(int x,int y,int width,int height,os_trfm *matrix)
 {
 	int block[16];
-	Draw_CreateRectanglePath(x,y,width,height,block);
+	AJWLib_Draw_CreateRectanglePath(x,y,width,height,block);
 	Desk_Error2_CheckOS(Desk_SWI(4,0,Desk_SWI_Draw_Fill,block,0,matrix,0));
 }
 
