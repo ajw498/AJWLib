@@ -3,6 +3,9 @@
 	© Alex Waugh 1998
 
 	$Log: not supported by cvs2svn $
+	Revision 1.2  1999/10/03 00:23:59  AJW
+	Disabled ReturnMessage
+
 	Revision 1.1  1999/10/02 23:07:59  AJW
 	Initial revision
 
@@ -13,11 +16,11 @@
 
 #include <stdio.h>
 
-void Beep(void)
+/*void Beep(void)
 {
 	putchar('\7');
 }
-
+*/
 /*void ReturnMessage(event_pollblock *block)
 {
 	switch (block->data.message.header.action) {
