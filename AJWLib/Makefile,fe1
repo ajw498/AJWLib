@@ -1,0 +1,49 @@
+HEADERS	=	\
+		Draw.h\
+		DrawFile.h\
+		Error2.h\
+		File.h\
+		FilerActn.h\
+		Flex.h\
+		Icon.h\
+		Menu.h\
+		Msgs.h\
+		Pane.h\
+		Str.h\
+		TaskWindow.h\
+		Window.h\
+		Assert.h\
+		Font.h
+
+OBJECTS	=	\
+		Draw.o\
+		Error2.o\
+		File.o\
+		FilerActn.o\
+		Flex.o\
+		Icon.o\
+		Menu.o\
+		Msgs.o\
+		Pane.o\
+		Str.o\
+		TaskWindow.o\
+		Window.o\
+		Font.o
+
+INCLUDE	=	L:
+
+TARGET		=	AJWLib.o
+
+CCFLAGS		=	-I$(INCLUDE) -mthrowback -O3
+LINKFLAGS	=-s
+
+CC		=	gcc -c $(CCFLAGS) -mstubs
+LINK		=	MakeALF $(LINKFLAGS)
+
+.c.o: $(HEADERS)
+	$(CC) $< -o $@
+
+
+$(TARGET):	$(OBJECTS)
+	$(LINK) -o $@ $(OBJECTS)
+
